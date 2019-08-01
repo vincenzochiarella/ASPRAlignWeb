@@ -6,7 +6,7 @@ class Landing extends React.Component {
     render() {
         return (
             <>
-                <Grid container alignContent='center' >
+                <Grid container justify='center' >
                     <Grid item>
                         <Paper>
                             <Typography>Welcome to ASPRAlign WebInterface</Typography>

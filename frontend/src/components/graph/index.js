@@ -10,7 +10,7 @@ class Graph extends React.Component {
             loading: true
         }
     }
-    componentWillMount(){
+    componentWillMount() {
         this.setState({
             tree: this.props.tree
         })
@@ -19,10 +19,8 @@ class Graph extends React.Component {
     render() {
         const { tree } = this.state
         return (
-            <>
-                <div id="treeWrapper" style={{ width: '80em', height: '50em' }}>
-                    <Tree data={tree} orientation='vertical'/>
-                </div>
+            <>                
+                <Tree data={tree} orientation='vertical' />
             </>
         )
     }
