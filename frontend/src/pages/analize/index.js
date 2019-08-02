@@ -1,10 +1,12 @@
 import React from 'react'
 import Graph from '../../components/graph'
-import { Grid, Paper, withStyles, Zoom } from '@material-ui/core'
+import { Grid, Paper, withStyles, Zoom, Slide } from '@material-ui/core'
+import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab'
+import { Send, Restore, SaveAlt, Edit } from '@material-ui/icons'
 
 import InputMolecule from '../../components/input'
-import Options from '../../components/options'
-
+import Options from '../../components/options/index'
+import ConfFile from '../../components/options/conffile'
 
 const treeEx = [{
     name: 'O',
@@ -121,13 +123,17 @@ const treeEx = [{
 const style = theme => ({
     fixedHeight: {
         height: '50vh'
+    },
+    speedDial: {
+        position: 'absolute',
+        bottom: theme.spacing(2)
     }
 })
 
 const defaultOptions = {
-    align: false,
+    align: true,
     chkpair: false,
-    outdist: false,
+    outdist: true,
     showscores: false,
     alg: false,
     latexout: false,
@@ -137,6 +143,14 @@ const defaultOptions = {
     out_text: '*.txt',
     struct: false
 }
+
+const speedDialActions = [
+    { icon: <Send />, name: 'Analize' },
+    { icon: <Restore />, name: 'Reset' },
+    { icon: <SaveAlt />, name: 'Download data' },
+]
+
+
 class Analize extends React.Component {
     constructor(props) {
         super(props)
@@ -144,13 +158,69 @@ class Analize extends React.Component {
             workBenchMode: false,
             trees: treeEx,
             opts: defaultOptions,
-            showOptions: false
+            showOptions: false,
+            FLAG_OPEN: true,
+            savedConfFile: false,
+            configfile: '',
+            enableSending: false,
+            expandSpeedDial: false
         }
         this.showOptions = this.showOptions.bind(this)
+        this.onChangeOptions = this.onChangeOptions.bind(this)
+        this.onCloseDialog = this.onCloseDialog.bind(this)
     }
-    showOptions (){
+    showOptions() {
         this.setState({
             showOptions: !this.state.showOptions
+        })
+    }
+    onChangeOptions = (opt) => {
+        this.setState({
+            opts: opt
+        })
+        if (opt.useconffile === false) {
+            this.setState({
+                savedConfFile: false
+            })
+        }
+        //TODO verify option validity
+    }
+
+    expandSpeedDial = event => {
+        this.setState({
+            expandSpeedDial: !this.state.expandSpeedDial
+        })
+        event.preventDefault()
+    }
+
+    handleSpeedDialAction = type => event => {
+        switch (type) {
+            case 'Analize':
+                //Send to backend
+                break;
+            case 'Reset':
+                //Reset conffile and options
+                break;
+            case 'Download data':
+                //Action download outputted tree
+                break;
+            default:
+                break;
+        }
+        event.preventDefault()
+    }
+
+
+
+    onCloseDialog() {
+        this.setState({
+            FLAG_OPEN: false
+        })
+    }
+    onSaveConfigFile = (config) => {
+        this.setState({
+            configfile: config,
+            savedConfFile: true
         })
     }
     componentWillMount() {
@@ -159,25 +229,55 @@ class Analize extends React.Component {
 
     render() {
         const { classes } = this.props
-        const { trees, showOptions, opts} = this.state
+        const { trees, showOptions, opts, savedConfFile, FLAG_OPEN, enableSending } = this.state
+        // console.log( 'Align to input', opts.align)
+        console.log(opts.useconffile && !savedConfFile)
         return (
             <>
-                <Grid container alignItems='scratch' direction='column' spacing={4} justify='center'>
-                    <Grid item lg sm>
-                        <InputMolecule showOptions={this.showOptions} align={opts.align}/>
+                <ConfFile showConfigFile={opts.useconffile && !savedConfFile && FLAG_OPEN} closeDialog={this.onCloseDialog} saveConfigurationFile={this.onSaveConfigFile} />
+                <Grid container alignItems='stretch' direction='column' spacing={4} justify='center'>
+                    <Grid item lg md sm>
+                        <InputMolecule showOptions={this.showOptions} align={opts.align} />
                     </Grid>
-                    <Grid item lg sm>
+                    {showOptions && <Grid item lg md sm>
                         <Zoom in={showOptions}>
                             <Paper elevation={8}>
-                                <Options opt={opts}/>
+                                <Options
+                                    opt={opts}
+                                    onChangeOpt={this.onChangeOptions}
+                                    editConfigFile={this.onEditConfiFile}
+                                    savedConfigFile={savedConfFile}
+                                />
                             </Paper>
                         </Zoom>
-                    </Grid>
+                    </Grid>}
                     <Grid item lg sm>
                         <Paper elevation={4} className={classes.fixedHeight}>
                             <Graph tree={trees} />
                         </Paper>
                     </Grid>
+
+                    <Grid item lg sm>
+                        <Slide direction='up' in={enableSending} >
+                            <SpeedDial
+                                className={classes.speedDial}
+                                onClick={this.expandSpeedDial}
+                                onFocus={this.expandSpeedDial}
+                                icon={<SpeedDialIcon openIcon={<Edit />} />}
+                            >
+                                {speedDialActions.map(actions => (
+                                    <SpeedDialAction
+                                        key={actions.name}
+                                        icon={actions.icon}
+                                        tooltipTitle={actions.name}
+                                        onClick={this.handleSpeedDialAction(actions.name)}
+                                    />
+                                ))}
+
+                            </SpeedDial>
+                        </Slide>
+                    </Grid>
+
                 </Grid >
 
             </>

@@ -1,137 +1,150 @@
 import React from 'react'
-import { Grid, FormControlLabel, Divider, Zoom, Checkbox, TextField,Paper } from '@material-ui/core'
+import {
+    Grid, FormControlLabel, Divider, Zoom, Checkbox, TextField, Paper,
+    Box
+} from '@material-ui/core'
+
 
 class Options extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            align: this.props.opt.align,
-            chkpair: this.props.opt.chkpair,
-            outdist: this.props.opt.outdist,
-            showscores: this.props.opt.showscores,
-            alg: this.props.opt.alg,
-            latexout: this.props.opt.latexout,
-            out: this.props.opt.out,
-            aasinput: this.props.opt.aasinput,
-            useconffile: this.props.opt.useconffile,            
-            out_text: this.props.opt.out_text,
-            struct: this.props.opt.struct,           
-
+            opt: this.props.opt
         }
+        this.handleChange = this.handleChange.bind(this)
+        this.onChangeText = this.onChangeText.bind(this)
     }
 
     //to be a correct call one of align, alg and struct had to be choosen 
     handleChange = selected => event => {
+        const optChanged = Object.assign(
+            {},
+            this.state.opt,
+            { [selected]: !this.state.opt[selected] }
+        )
         this.setState({
-            [selected]: event.target.value
+            opt: optChanged
         })
+        this.props.onChangeOpt(optChanged)
         event.preventDefault()
     }
-    onChange = changedvalue => event => {
+    onChangeText = changedvalue => event => {
+        const optChanged = Object.assign(
+            {},
+            this.state.opt,
+            { [changedvalue]: event.target.value }
+        )
         this.setState({
-            [changedvalue]: event.target.value
+            opt: optChanged
         })
+        this.props.onChangeOpt(optChanged)
         event.preventDefault()
     }
     render() {
-        const { align, chkpair, outdist, showscores, latexout, alg, aasinput, out_text, out, struct, useconffile } = this.state
+        const { align, chkpair, outdist, showscores, latexout, alg, aasinput, out_text, out, struct, useconffile } = this.state.opt
+
         return (
             <>
-                <Grid container direction='column' alignItems='stretch'>
+                <Box margin={4}>
+                    <Grid container direction='column' alignItems="stretch">
 
-                    <Grid item >
-                        <FormControlLabel
-                            control={<Checkbox checked={align} onChange={this.handleChange('align')} value={align} />}
-                            label="Align two given structures producing alignment tree and distance"
-                        />
-                        <Divider />
-                    </Grid>
-                    <Grid item >
-                        <FormControlLabel
-                            control={<Checkbox checked={chkpair} onChange={this.handleChange('chkpair')} value={chkpair} />}
-                            label="Check the presence of only standard Watson-Crick and wobble base pairing (disabled by default)"
-                        />
-                        <Divider />
-                    </Grid>
-                    <Grid item >
-                        <Zoom in={align}>
-                        <>
+                        <Grid item >
                             <FormControlLabel
-                                control={<Checkbox checked={outdist} onChange={this.handleChange('outdist')} value={outdist} />}
-                                label="Output only distance, no alignment tree"
+                                control={<Checkbox onClick={this.handleChange('align')} checked={align} />}
+                                label="Align two given structures producing alignment tree and distance"
                             />
                             <Divider />
-                            </>
-                        </Zoom>
-                    </Grid>
-                    <Grid item >
-                        <Zoom in={align}>
-                            <>
+                        </Grid>
+                        <Grid item >
                             <FormControlLabel
-                                control={<Checkbox checked={showscores} onChange={this.handleChange('showscores')} value={showscores} />}
-                                label="Show current values of edit scores used for alignment"
+                                control={<Checkbox onClick={this.handleChange('chkpair')} checked={chkpair} />}
+                                label="Check the presence of only standard Watson-Crick and wobble base pairing (disabled by default)"
                             />
                             <Divider />
-                            </>
-                        </Zoom>
-                    </Grid>
-                    <Grid item >
-                        <FormControlLabel
-                            control={<Checkbox checked={alg} onChange={this.handleChange('alg')} value={alg} />}
-                            label="Produce the algebraic RNA tree corresponding to the given structure"
-                        />
-                        <Divider />
-                    </Grid>
-                    <Grid item >
-                        <FormControlLabel
-                            control={<Checkbox checked={latexout} onChange={this.handleChange('latexout')} value={latexout} />}
-                            label="Output in LaTeX format instead of linearised tree"
-                        />
-                        <Divider />
-                    </Grid>
-                    <Grid item >
-                        <FormControlLabel
-                            control={<Checkbox checked={useconffile} onChange={this.handleChange('useconffile')} value={useconffile} />}
-                            label=" Use the specified configuration file instead of the default one"
-                        />
-                        <Divider />
-                    </Grid>
+                        </Grid>
+                        <Grid item >
+                            <Zoom in={align}>
+                                <>
+                                    <FormControlLabel
+                                        control={<Checkbox checked={outdist} onClick={this.handleChange('outdist')} />}
+                                        label="Output only distance, no alignment tree"
+                                    />
+                                    <Divider />
+                                </>
+                            </Zoom>
+                        </Grid>
+                        <Grid item >
+                            <Zoom in={align}>
+                                <>
+                                    <FormControlLabel
+                                        control={<Checkbox onClick={this.handleChange('showscores')} checked={showscores} />}
+                                        label="Show current values of edit scores used for alignment"
+                                    />
+                                    <Divider />
+                                </>
+                            </Zoom>
+                        </Grid>
+                        <Grid item >
+                            <FormControlLabel
+                                control={<Checkbox onClick={this.handleChange('alg')} checked={alg} />}
+                                label="Produce the algebraic RNA tree corresponding to the given structure"
+                            />
+                            <Divider />
+                        </Grid>
+                        <Grid item >
+                            <FormControlLabel
+                                control={<Checkbox onClick={this.handleChange('latexout')} checked={latexout} />}
+                                label="Output in LaTeX format instead of linearised tree"
+                            />
+                            <Divider />
+                        </Grid>
+                        <Grid item >
+                            <FormControlLabel
+                                control={<Checkbox onClick={this.handleChange('useconffile')} checked={useconffile} />}
+                                label=" Use the specified configuration file instead of the default one"
+                            />
+                            <Divider />
+                        </Grid>
 
-                    <Grid item >
-                        <FormControlLabel
-                            control={<Checkbox checked={out} onChange={this.handleChange('out')} value={out} />}
-                            label=" Output result on the given file instead of standard output"
-                        />
-                        <Zoom in={out}>
-                            <Paper>
-                                <TextField
-                                id='main-textarea'
-                                label='Custom file name'
-                                multiline={true}
-                                value={out_text}
-                                onChange={this.onChange('out_text')}
-                                fullWidth={true}
-                                variant="outlined"
-                                />             
-                            </Paper> 
-                        </Zoom>
-                        <Divider />
+                        <Grid item >
+                            <FormControlLabel
+                                control={<>
+                                    <Checkbox onClick={this.handleChange('out')} checked={out} />
+                                    <Zoom in={out}>
+                                        <Paper>
+                                            <TextField
+                                                id='main-textarea'
+                                                label='Custom file name'
+                                                multiline={true}
+                                                value={out_text}
+                                                onChange={this.onChangeText('out_text')}
+                                                fullWidth={true}
+                                                variant="outlined"
+                                            />
+                                        </Paper>
+                                    </Zoom>
+                                </>}
+                                label=" Output result on the given file instead of standard output"
+                            />
+
+                            <Divider />
+                        </Grid>
+                        <Grid item >
+                            <FormControlLabel
+                                control={<Checkbox onClick={this.handleChange('aasinput')} checked={aasinput} />}
+                                label="Input Arc Annotated Sequence file(s) instead of Extended Dot-Bracket Notation file(s)"
+                            />
+                            <Divider />
+                        </Grid>
+                        <Grid item >
+                            <FormControlLabel
+                                control={<Checkbox onClick={this.handleChange('struct')} checked={struct} />}
+                                label="Produce the structural RNA tree corresponding to the given structure"
+                            />
+                            <Divider />
+                        </Grid>
                     </Grid>
-                    <Grid item >
-                        <FormControlLabel
-                            control={<Checkbox checked={aasinput} onChange={this.handleChange('aasinput')} value={aasinput} />}
-                            label="Input Arc Annotated Sequence file(s) instead of Extended Dot-Bracket Notation file(s)"
-                        />
-                        <Divider />
-                    </Grid>
-                    <Grid item >
-                        <FormControlLabel
-                            control={<Checkbox checked={struct} onChange={this.handleChange('struct')} value={struct} />}
-                            label="Input Arc Annotated Sequence file(s) instead of Extended Dot-Bracket Notation file(s)"
-                        />
-                        <Divider />
-                    </Grid>
-                </Grid>
+                </Box>
             </>
         )
     }

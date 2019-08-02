@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.2.1",
     "@material-ui/icons": "^4.2.1",
+    "@material-ui/lab": "^4.0.0-alpha.21",
     "clsx": "^1.0.4",
     "react": "^16.8.6",
     "react-d3-tree": "^1.13.0",
