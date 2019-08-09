@@ -1,11 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Drawer, Toolbar, AppBar, List, ListItem, ListItemText, IconButton, withStyles, Slide, Typography} from '@material-ui/core'
+import { Drawer, Toolbar, AppBar, List, ListItem, ListItemText, IconButton, withStyles, Slide, Typography } from '@material-ui/core'
 import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab'
 import { Menu, Edit, Send, Restore, SaveAlt } from '@material-ui/icons'
 import { compose } from 'recompose'
 import { withRouter } from 'react-router-dom'
 import * as ROUTES from '../../constants/routes'
+
+import { OptionsContext } from '../options/OptionsProvider'
+
 
 const styles = theme => ({
     content: {
@@ -29,7 +32,7 @@ class Layout extends React.Component {
         this.state = {
             open: false,
             dialOpen: false,
-            dialHidden: false,
+            dialShow: false,
         }
         this.expandSpeedDial = this.expandSpeedDial.bind(this)
     }
@@ -62,7 +65,7 @@ class Layout extends React.Component {
     }
 
     render() {
-        const { children, classes, location      } = this.props
+        const { children, classes, location } = this.props
         const { open, dialOpen, dialShow } = this.state
 
         const ListDrawer = (
@@ -102,7 +105,7 @@ class Layout extends React.Component {
                         <Menu />
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap>
-                            {location.pathname.substr(1).toUpperCase()}                    
+                        {location.pathname.substr(1).toUpperCase()}
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -110,28 +113,32 @@ class Layout extends React.Component {
                 {ListDrawer}
             </Drawer>
             <main className={classes.content}>
-                {children}                
-            </main> 
-            <Slide in={dialShow}>            
-                    <SpeedDial
-                        className={classes.speedDial}
-                        ariaLabel="Menu"
-                        onClick={this.expandSpeedDial}
-                        onFocus={this.expandSpeedDial}
-                        open={dialOpen}
-                        direction='up'
-                        icon={<SpeedDialIcon openIcon={<Edit />} />}
-                    >
-                        {speedDialActions.map(actions => (
-                            <SpeedDialAction
-                                key={actions.name}
-                                icon={actions.icon}
-                                tooltipTitle={actions.name}
-                                onClick={this.handleSpeedDialAction(actions.name)}
-                            />
-                        ))}
-                    </SpeedDial>
-            </Slide>  
+                {children}
+            </main>
+            <OptionsContext.Consumer>
+                {options =>
+
+                    <Slide in={options.opt.align}>
+                        <SpeedDial
+                            className={classes.speedDial}
+                            ariaLabel="Menu"
+                            onClick={this.expandSpeedDial}
+                            onFocus={this.expandSpeedDial}
+                            open={dialOpen}
+                            direction='up'
+                            icon={<SpeedDialIcon openIcon={<Edit />} />}
+                        >
+                            {speedDialActions.map(actions => (
+                                <SpeedDialAction
+                                    key={actions.name}
+                                    icon={actions.icon}
+                                    tooltipTitle={actions.name}
+                                    onClick={this.handleSpeedDialAction(actions.name)}
+                                />
+                            ))}
+                        </SpeedDial>
+                    </Slide>}
+            </OptionsContext.Consumer>
 
         </>)
     }

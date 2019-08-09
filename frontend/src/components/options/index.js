@@ -4,6 +4,8 @@ import {
     Box
 } from '@material-ui/core'
 
+import { OptionsContext } from '../options/OptionsProvider'
+
 
 class Options extends React.Component {
     constructor(props) {
@@ -24,8 +26,11 @@ class Options extends React.Component {
         )
         this.setState({
             opt: optChanged
-        })
-        this.props.onChangeOpt(optChanged)
+        })        
+        //USE consumer
+        //this.props.onChangeOpt(optChanged)
+        
+        this.changeProviderValues(optChanged)
         event.preventDefault()
     }
     onChangeText = changedvalue => event => {
@@ -37,8 +42,19 @@ class Options extends React.Component {
         this.setState({
             opt: optChanged
         })
-        this.props.onChangeOpt(optChanged)
+        //USE consumer
+        this.changeProviderValues(optChanged)
+
+        // this.props.onChangeOpt(optChanged)
         event.preventDefault()
+    }
+    changeProviderValues = ( opts ) => {
+        // console.log(opts)
+        return(<OptionsContext.Consumer>
+            {opt =>(
+                opt.changeOpts(opts)
+                )}
+        </OptionsContext.Consumer>)
     }
     render() {
         const { align, chkpair, outdist, showscores, latexout, alg, aasinput, out_text, out, struct, useconffile } = this.state.opt

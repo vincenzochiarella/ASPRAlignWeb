@@ -8,13 +8,15 @@ import Layout from './components/layout'
 import { Container } from '@material-ui/core'
 import * as ROUTES from './constants/routes'
 
+import OptionsProvider from '../src/components/options/OptionsProvider'
 
 class App extends React.Component {
 
   render() {
     return (
-      
-        <BrowserRouter>
+
+      <BrowserRouter>
+        <OptionsProvider>
           <Layout>
             <Container maxWidth='lg'>
               <Switch>
@@ -25,7 +27,8 @@ class App extends React.Component {
               </Switch>
             </Container>
           </Layout>
-        </BrowserRouter>
+        </OptionsProvider>
+      </BrowserRouter>
     )
   }
 }

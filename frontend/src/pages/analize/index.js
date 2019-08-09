@@ -2,11 +2,11 @@ import React from 'react'
 import Graph from '../../components/graph'
 import { Grid, Paper, withStyles, Zoom } from '@material-ui/core'
 
-// import { Send, Restore, SaveAlt } from '@material-ui/icons'
-
 import InputMolecule from '../../components/input'
 import Options from '../../components/options/index'
-import ConfFile from '../../components/options/conffile'
+import { OptionsContext } from '../../components/options/OptionsProvider'
+
+import ConfFile from '../../components/options/ConfFile'
 
 const treeEx = [{
     name: 'O',
@@ -170,12 +170,13 @@ class Analize extends React.Component {
             showOptions: false,
             FLAG_OPEN: true,
             savedConfFile: false,
+
             configfile: '',
             enableSending: false,
             expandSpeedDial: false
         }
         this.showOptions = this.showOptions.bind(this)
-        this.onChangeOptions = this.onChangeOptions.bind(this)
+        // this.onChangeOptions = this.onChangeOptions.bind(this)
         this.onCloseDialog = this.onCloseDialog.bind(this)
     }
     showOptions() {
@@ -183,17 +184,17 @@ class Analize extends React.Component {
             showOptions: !this.state.showOptions
         })
     }
-    onChangeOptions = (opt) => {
-        this.setState({
-            opts: opt
-        })
-        if (opt.useconffile === false) {
-            this.setState({
-                savedConfFile: false
-            })
-        }
-        //TODO verify option validity
-    }
+    // onChangeOptions = (opt) => {
+    //     this.setState({
+    //         opts: opt
+    //     })
+    //     if (opt.useconffile === false) {
+    //         this.setState({
+    //             savedConfFile: false
+    //         })
+    //     }
+    //     //TODO verify option validity
+    // }
 
 
 
@@ -211,40 +212,44 @@ class Analize extends React.Component {
             savedConfFile: true
         })
     }
-    componentWillMount() {
-
-    }
 
     render() {
         const { classes } = this.props
         const { showOptions, opts, savedConfFile, FLAG_OPEN } = this.state
         // console.log( 'Align to input', opts.align)
-        console.log(opts.useconffile && !savedConfFile)
+        // console.log(opts.useconffile && !savedConfFile)
         return (
             <>
-                <ConfFile showConfigFile={opts.useconffile && !savedConfFile && FLAG_OPEN} closeDialog={this.onCloseDialog} saveConfigurationFile={this.onSaveConfigFile} />
-                <Grid container alignItems='stretch' direction='column' spacing={4} justify='center'>
-                    <Grid item lg md sm>
-                        <InputMolecule showOptions={this.showOptions} align={opts.align} />
-                    </Grid>
-                    {showOptions && <Grid item lg md sm>
-                        <Zoom in={showOptions}>
-                            <Paper elevation={8}>
-                                <Options
-                                    opt={opts}
-                                    onChangeOpt={this.onChangeOptions}
-                                    editConfigFile={this.onEditConfiFile}
-                                    savedConfigFile={savedConfFile}
-                                />
-                            </Paper>
-                        </Zoom>
-                    </Grid>}
-                    <Grid item lg sm>
-                        <Paper elevation={4} className={classes.fixedHeight}>
-                            <Graph tree={firstTryConversion} />
-                        </Paper>
-                    </Grid>
-                </Grid >
+                <OptionsContext.Consumer>
+                    {options =>
+                        <>
+                            <ConfFile showConfigFile={options.opt.useconffile && !savedConfFile && FLAG_OPEN}
+                                closeDialog={this.onCloseDialog}
+                                saveConfigurationFile={this.onSaveConfigFile} />
+                            <Grid container alignItems='stretch' direction='column' spacing={4} justify='center'>
+                                <Grid item lg md sm>
+                                    <InputMolecule showOptions={this.showOptions} align={options.opt.align} />
+                                </Grid>
+                                {showOptions && <Grid item lg md sm>
+                                    <Zoom in={showOptions}>
+                                        <Paper elevation={8}>
+                                            <Options
+                                                opt={options.opt}
+                                                // onChangeOpt={this.onChangeOptions}
+                                                editConfigFile={this.onEditConfiFile}
+                                                savedConfigFile={savedConfFile}
+                                            />
+                                        </Paper>
+                                    </Zoom>
+                                </Grid>}
+                                <Grid item lg sm>
+                                    <Paper elevation={4} className={classes.fixedHeight}>
+                                        <Graph tree={firstTryConversion} />
+                                    </Paper>
+                                </Grid>
+                            </Grid >
+                        </>}
+                </OptionsContext.Consumer>
 
             </>
         )
