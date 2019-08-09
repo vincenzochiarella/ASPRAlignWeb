@@ -1,8 +1,8 @@
 import React from 'react'
 import Graph from '../../components/graph'
-import { Grid, Paper, withStyles, Zoom, Slide } from '@material-ui/core'
-import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab'
-import { Send, Restore, SaveAlt, Edit } from '@material-ui/icons'
+import { Grid, Paper, withStyles, Zoom } from '@material-ui/core'
+
+// import { Send, Restore, SaveAlt } from '@material-ui/icons'
 
 import InputMolecule from '../../components/input'
 import Options from '../../components/options/index'
@@ -118,7 +118,16 @@ const treeEx = [{
     ]
 }]
 
+const firstTryConversion = [
+    {
+        name: '(CROS,2)', children: [{ name: 'NEST', children: [{ name: 'NEST', children: [{ name: 'CONC', children: [{ name: 'H(4,7)' }, { name: 'H(9,12)' }] }, { name: 'H(3,13)' }] }, { name: 'H(2,14)' }] }, {
+            name: 'H(8,17)'
+        }]
+    }
+]
 
+const secondCoversion = [
+]
 
 const style = theme => ({
     fixedHeight: {
@@ -144,11 +153,11 @@ const defaultOptions = {
     struct: false
 }
 
-const speedDialActions = [
-    { icon: <Send />, name: 'Analize' },
-    { icon: <Restore />, name: 'Reset' },
-    { icon: <SaveAlt />, name: 'Download data' },
-]
+// const speedDialActions = [
+//     { icon: <Send />, name: 'Analize' },
+//     { icon: <Restore />, name: 'Reset' },
+//     { icon: <SaveAlt />, name: 'Download data' },
+// ]
 
 
 class Analize extends React.Component {
@@ -186,29 +195,8 @@ class Analize extends React.Component {
         //TODO verify option validity
     }
 
-    expandSpeedDial = event => {
-        this.setState({
-            expandSpeedDial: !this.state.expandSpeedDial
-        })
-        event.preventDefault()
-    }
 
-    handleSpeedDialAction = type => event => {
-        switch (type) {
-            case 'Analize':
-                //Send to backend
-                break;
-            case 'Reset':
-                //Reset conffile and options
-                break;
-            case 'Download data':
-                //Action download outputted tree
-                break;
-            default:
-                break;
-        }
-        event.preventDefault()
-    }
+
 
 
 
@@ -229,7 +217,7 @@ class Analize extends React.Component {
 
     render() {
         const { classes } = this.props
-        const { trees, showOptions, opts, savedConfFile, FLAG_OPEN, enableSending } = this.state
+        const { showOptions, opts, savedConfFile, FLAG_OPEN } = this.state
         // console.log( 'Align to input', opts.align)
         console.log(opts.useconffile && !savedConfFile)
         return (
@@ -253,31 +241,9 @@ class Analize extends React.Component {
                     </Grid>}
                     <Grid item lg sm>
                         <Paper elevation={4} className={classes.fixedHeight}>
-                            <Graph tree={trees} />
+                            <Graph tree={firstTryConversion} />
                         </Paper>
                     </Grid>
-
-                    <Grid item lg sm>
-                        <Slide direction='up' in={enableSending} >
-                            <SpeedDial
-                                className={classes.speedDial}
-                                onClick={this.expandSpeedDial}
-                                onFocus={this.expandSpeedDial}
-                                icon={<SpeedDialIcon openIcon={<Edit />} />}
-                            >
-                                {speedDialActions.map(actions => (
-                                    <SpeedDialAction
-                                        key={actions.name}
-                                        icon={actions.icon}
-                                        tooltipTitle={actions.name}
-                                        onClick={this.handleSpeedDialAction(actions.name)}
-                                    />
-                                ))}
-
-                            </SpeedDial>
-                        </Slide>
-                    </Grid>
-
                 </Grid >
 
             </>

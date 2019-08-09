@@ -7,7 +7,11 @@ const Process = require('../builder/stringBuilder')
 
 
 Options_Route.post('/analize', (req,res) =>{
-    res.send(Process.start(req.body.options, req.body.stringinput))
+    const outGraph = Process.start(req.body.options, req.body.stringinput).then( data =>{
+
+        console.log(data)
+        res.send(data)
+    })
     
 })
 
