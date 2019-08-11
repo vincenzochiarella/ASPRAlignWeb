@@ -126,9 +126,6 @@ const firstTryConversion = [
     }
 ]
 
-const secondCoversion = [
-]
-
 const style = theme => ({
     fixedHeight: {
         height: '50vh'
@@ -153,19 +150,13 @@ const defaultOptions = {
     struct: false
 }
 
-// const speedDialActions = [
-//     { icon: <Send />, name: 'Analize' },
-//     { icon: <Restore />, name: 'Reset' },
-//     { icon: <SaveAlt />, name: 'Download data' },
-// ]
-
 
 class Analize extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             workBenchMode: false,
-            trees: treeEx,
+            outTrees: treeEx,
             opts: defaultOptions,
             showOptions: false,
             FLAG_OPEN: true,
@@ -215,7 +206,7 @@ class Analize extends React.Component {
 
     render() {
         const { classes } = this.props
-        const { showOptions, opts, savedConfFile, FLAG_OPEN } = this.state
+        const { showOptions, savedConfFile, FLAG_OPEN } = this.state
         // console.log( 'Align to input', opts.align)
         // console.log(opts.useconffile && !savedConfFile)
         return (
@@ -223,19 +214,17 @@ class Analize extends React.Component {
                 <OptionsContext.Consumer>
                     {options =>
                         <>
-                            <ConfFile showConfigFile={options.opt.useconffile && !savedConfFile && FLAG_OPEN}
-                                closeDialog={this.onCloseDialog}
-                                saveConfigurationFile={this.onSaveConfigFile} />
+                            <ConfFile
+                                    showConfigFile={options.opt.useconffile && !savedConfFile && FLAG_OPEN}
+                                    closeDialog={this.onCloseDialog} />
                             <Grid container alignItems='stretch' direction='column' spacing={4} justify='center'>
                                 <Grid item lg md sm>
-                                    <InputMolecule showOptions={this.showOptions} align={options.opt.align} />
+                                    <InputMolecule showOptions={this.showOptions} />
                                 </Grid>
                                 {showOptions && <Grid item lg md sm>
                                     <Zoom in={showOptions}>
                                         <Paper elevation={8}>
                                             <Options
-                                                opt={options.opt}
-                                                // onChangeOpt={this.onChangeOptions}
                                                 editConfigFile={this.onEditConfiFile}
                                                 savedConfigFile={savedConfFile}
                                             />

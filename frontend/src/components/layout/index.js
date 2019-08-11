@@ -117,7 +117,6 @@ class Layout extends React.Component {
             </main>
             <OptionsContext.Consumer>
                 {options =>
-
                     <Slide in={options.opt.align}>
                         <SpeedDial
                             className={classes.speedDial}

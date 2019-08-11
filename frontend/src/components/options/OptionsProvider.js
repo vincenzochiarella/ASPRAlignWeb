@@ -1,60 +1,89 @@
 import React from 'react'
 
 export const OptionsContext = React.createContext()
-const defaultOptions = {
-    align: true,
-    chkpair: false,
-    outdist: true,
-    showscores: false,
-    alg: false,
-    latexout: false,
-    out: false,
-    aasinput: false,
-    useconffile: false,
-    out_text: '*.txt',
-    struct: false
-}
+
 
 class OptionsProvider extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            opt: defaultOptions,
-            strings: [],
-            configFile: null,
-            changeOpts: this.changeOpts,
-            changeStrings: this.changeStrings,
-            changeConfFile: this.changeConfFile
-        }
-        this.changeOpts = (opts) => {
-            this.setState({
-                opt: opts
-            });
-        }
-        this.changeStrings = (strings) => {
-            this.setState({
-                strings: strings
-            })
-        }
-        this.changeConfFile = (conffile) => {
-            this.setState({
-                configFile: conffile
-            })
-        }
+    state = {
+        opt: {
+            align: false,
+            chkpair: false,
+            outdist: false,
+            showscores: false,
+            alg: false,
+            latexout: false,
+            out: false,
+            aasinput: false,
+            useconffile: false,
+            conffile: {
+                insertOp: 100,
+                deletingOp: 100,
+                replaceOp: 100,
+                deleteHair: 100,
+                insertHair: 100,
+                crossingMism: 1
+            },
+            out_text: '*.txt',
+            struct: true
+        },
+        strings: [],
+        changeOpts: (selected) => (event) => {
+            this.setState(prevState => ({
+                opt: {
+                    ...prevState.opt,
+                    [selected]: !this.state.opt[selected]
+                }
+            }))
+            event.preventDefault()
+        },
+        changeConfFile: (event) => {
+            this.setState(prevState => ({
+                opt: {
+                    ...prevState.opt,
+                    conffile: {
+                        ...prevState.opt.conffile,
+                        [event.target.id]: event.target.value
+                    }
 
-
-    }
-    componentDidMount(){
-        this.setState({
-            opt: defaultOptions
-        })        
-    }
-
-
-    changeConfFile = (conffile) => {
-        this.setState({
-            configFile: conffile
-        })
+                }
+            }))
+            event.persist()
+            event.preventDefault()
+        },
+        resetConfFile: ( event ) => {
+            this.setState(prevState => ({
+                opt: {
+                    ...prevState.opt,
+                    conffile: {
+                        insertOp: 100,
+                        deletingOp: 100,
+                        replacingOp: 100,
+                        deleteHair: 100,
+                        insertHair: 100,
+                        crossingMism: 1
+                    }
+                }
+            }))
+            event.preventDefault()
+        },
+        changeOutFile: (event) => {
+            this.setState(prevState => ({
+                opt: {
+                    ...prevState.opt,
+                    out_text: event.target.value
+                }
+            }))
+            event.persist()
+            event.preventDefault()
+        },
+        changeMolecule: (event) => {
+            this.setState(prevState => ({
+                ...prevState,
+                [event.target.id]: event.target.value
+            }))
+            event.persist()
+            event.preventDefault()
+        },
     }
     render() {
         const { children } = this.props

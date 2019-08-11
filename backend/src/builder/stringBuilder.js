@@ -13,11 +13,13 @@ module.exports.start = Elaboration = (options, input) => {
         //         return console.log(err)
         //     }
         // })
-
-        const JavaProcess = require('child_process').spawn('java', ['-jar', pathFolder + '\\ASPRAlign.jar', '-s', pathFolder + '\\Test1.txt'])
+        // resolve(optionsSwitch(JSON.parse(options),JSON.parse(input)))
+        // resolve()
+        const args = optionsSwitch(JSON.parse(options), JSON.parse(input))
+        const JavaProcess = require('child_process').spawn('java', args)
         console.log(JavaProcess.pid)
-
         JavaProcess.stdout.on('data', (data) => {
+            console.log(data)
             resolve(parser.parseToJSONTree(data.toString()))
         })
         JavaProcess.stderr.on('data', (data) => {
@@ -29,43 +31,51 @@ module.exports.start = Elaboration = (options, input) => {
     })
 }
 
-optionsSwitch = ( options, input, id ) => { 
+optionsSwitch = (options, input) => {
     var optionsRequested = ['-jar', pathFolder + '\\ASPRAlign.jar']
-    if(options.aasinput) {
-        optionsRequested = optionsRequested.concat('-r'),
+    if (options.aasinput) {
+        optionsRequested.push('-r')
     }
-    if(options.align){
-        optionsRequested = optionsRequested.concat('-a'),
-        optionsRequested = optionsRequested.concat(temporaryFile(input[0],1))
-        optionsRequested = optionsRequested.concat(temporaryFile(input[1],2))
-        if(options.chkpair) optionsRequested = optionsRequested.concat('-c')
-        if(options.outdist) optionsRequested = optionsRequested.concat('-d')
-        if(options.showscores) optionsRequested = optionsRequested.concat('-e')
-    } else if( options.alg ){
-        optionsRequested = optionsRequested.concat('-g')
-        optionsRequested = optionsRequested.concat(temporaryFile(input[0],1))
-    
-    } else if( options.struct ){
-        optionsRequested = optionsRequested.concat('-s')
-        optionsRequested = optionsRequested.concat(temporaryFile(input[0],1))
+    if (options.align) {
+        optionsRequested.push('-a'),
+            optionsRequested.push(temporaryFile(input.analize[0].molecule, 1))
+        optionsRequested.push(temporaryFile(input.analize[1].molecule, 2))
+        if (options.chkpair) optionsRequested.push('-c')
+        if (options.outdist) optionsRequested.push('-d')
+        if (options.showscores) optionsRequested.push('-e')
+    } else if (options.alg) {
+        optionsRequested.push('-g')
+        optionsRequested.push(temporaryFile(input.analize[0].molecule, 1))
+
+    } else if (options.struct) {
+        optionsRequested.push('-s')
+        optionsRequested.push(temporaryFile(input.analize[0].molecule, 1))
     }
-    if( options.latexout){
-        optionsRequested = optionsRequested.concat('-l')
+    if (options.latexout) {
+        optionsRequested.push('-l')
     }
-    if( options.useconffile){
-        optionsRequested = optionsRequested.concat('-l')
+    if (options.useconffile) {
+        optionsRequested.push('-n')
+        optionsRequested.push(temporaryConffile(options.conffile))
     }
+
     return optionsRequested
 }
-temporaryFile = ( input , inc ) => {
+temporaryFile = (input, inc) => {
     //da cancellare appena finita l'elaborazione
-    fs.writeFile(pathFolder + `/Test_${inc}.txt`, input, (err) => {
+    fs.writeFile(pathFolder + `\\Test${inc}.txt`, input, (err) => {
         if (err) {
             return console.log(err)
         }
     })
-    return pathFolder + `/Test_${inc}.txt`
+    return pathFolder + `\\Test${inc}.txt`
 }
-temporaryConffile = ( input ) =>{
-
+temporaryConffile = (conf) => {
+    var string = `INSERT_OPERATOR_COST=${conf.insertOp}\nDELETE_OPERATOR_COST=${conf.deletingOp}\nREPLACE_OPERATOR_COST=${conf.replaceOp}\nINSERT_HAIRPIN_COST=${conf.deleteHair}\nDELETE_HAIRPIN_COST=${conf.insertHair}\nCROSSING_MISMATCH_COST=${conf.crossingMism}`
+    fs.writeFile(pathFolder + `\\ConfFile.txt`, string, (err) => {
+        if (err) {
+            return console.log(err)
+        }
+    })
+    return pathFolder + `\\ConfFile.txt`
 }

@@ -11,12 +11,11 @@ import * as ROUTES from './constants/routes'
 import OptionsProvider from '../src/components/options/OptionsProvider'
 
 class App extends React.Component {
-
   render() {
     return (
 
       <BrowserRouter>
-        <OptionsProvider>
+        <OptionsProvider >
           <Layout>
             <Container maxWidth='lg'>
               <Switch>
