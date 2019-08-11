@@ -13,7 +13,7 @@ class OptionsProvider extends React.Component {
             alg: false,
             latexout: false,
             out: false,
-            aasinput: false,
+            aasinput: true,
             useconffile: false,
             conffile: {
                 insertOp: 100,
@@ -24,9 +24,29 @@ class OptionsProvider extends React.Component {
                 crossingMism: 1
             },
             out_text: '*.txt',
+            molecule0: 'AGGG\r\n....',
+            molecule1: 'AGGG\r\n....',
             struct: true
+        }, 
+        validateOptions: true,
+        resolvedOutput: '',
+        getMoleculesArray: () => {            
+            if(this.state.opt.align){
+                return {
+                    "analize": [
+                        {"molecule": this.state.opt.molecule0},
+                        {"molecule": this.state.opt.molecule1}
+                    ]
+                }
+            }else {
+                return {
+                    "analize": [
+                        {"molecule": this.state.opt.molecule0}
+                    ]
+                }
+            }
+            
         },
-        strings: [],
         changeOpts: (selected) => (event) => {
             this.setState(prevState => ({
                 opt: {
@@ -79,11 +99,15 @@ class OptionsProvider extends React.Component {
         changeMolecule: (event) => {
             this.setState(prevState => ({
                 ...prevState,
-                [event.target.id]: event.target.value
+                opt:{
+                    ...prevState.opt,
+                    [event.target.id]: event.target.value
+                }
             }))
             event.persist()
             event.preventDefault()
         },
+        
     }
     render() {
         const { children } = this.props

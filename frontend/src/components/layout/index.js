@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom'
 import * as ROUTES from '../../constants/routes'
 
 import { OptionsContext } from '../options/OptionsProvider'
+import { runASPRALign } from '../../controllers/OptionsController'
 
 
 const styles = theme => ({
@@ -47,10 +48,12 @@ class Layout extends React.Component {
         })
         event.preventDefault()
     }
-    handleSpeedDialAction = type => event => {
+    handleSpeedDialAction = (type, options, molecules) => event => {
         switch (type) {
             case 'Analize':
-                //Send to backend
+                runASPRALign( options, molecules )
+                .then(res=> console.log( res ))
+                .catch(err => console.log( err ))
                 break;
             case 'Reset':
                 //Reset conffile and options
@@ -117,7 +120,7 @@ class Layout extends React.Component {
             </main>
             <OptionsContext.Consumer>
                 {options =>
-                    <Slide in={options.opt.align}>
+                    <Slide in={options.validateOptions}>
                         <SpeedDial
                             className={classes.speedDial}
                             ariaLabel="Menu"
@@ -132,7 +135,7 @@ class Layout extends React.Component {
                                     key={actions.name}
                                     icon={actions.icon}
                                     tooltipTitle={actions.name}
-                                    onClick={this.handleSpeedDialAction(actions.name)}
+                                    onClick={this.handleSpeedDialAction(actions.name, options.opt, options.getMoleculesArray() )}
                                 />
                             ))}
                         </SpeedDial>
