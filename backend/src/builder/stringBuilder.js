@@ -7,20 +7,11 @@ const parser = require('./stringAnalizer')
 
 module.exports.start = Elaboration = (options, input) => {
     return new Promise((resolve, reject) => {
-        //da cancellare appena elaborato (oppure chiedere se lasciarlo)
-        // fs.writeFile(pathFolder + '/Test1.txt', input, (err) => {
-        //     if (err) {
-        //         return console.log(err)
-        //     }
-        // })
-        // resolve(optionsSwitch(JSON.parse(options),JSON.parse(input)))
-        // resolve()
-        const args = optionsSwitch(JSON.parse(options), JSON.parse(input))
+        const args = optionsSwitch(options, input)
         const JavaProcess = require('child_process').spawn('java', args)
         console.log(JavaProcess.pid)
         JavaProcess.stdout.on('data', (data) => {
-            console.log(data)
-            resolve(parser.parseToJSONTree(data.toString()))
+            resolve(JSON.stringify(parser.parseToJSONTree(data.toString())))
         })
         JavaProcess.stderr.on('data', (data) => {
             reject(data)

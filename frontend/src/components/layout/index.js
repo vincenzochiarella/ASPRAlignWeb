@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Drawer, Toolbar, AppBar, List, ListItem, ListItemText, IconButton, withStyles, Slide, Typography } from '@material-ui/core'
 import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab'
-import { Menu, Edit, Send, Restore, SaveAlt } from '@material-ui/icons'
+import { Menu, Edit, Send, Restore, SaveAlt, FlipToBack } from '@material-ui/icons'
 import { compose } from 'recompose'
 import { withRouter } from 'react-router-dom'
 import * as ROUTES from '../../constants/routes'
@@ -22,9 +22,10 @@ const styles = theme => ({
     }
 })
 const speedDialActions = [
-    { icon: <Send />, name: 'Analize' },
-    { icon: <Restore />, name: 'Reset' },
-    { icon: <SaveAlt />, name: 'Download data' },
+    { icon: <Send />, name: 'Analize', show: true},
+    { icon: <Restore />, name: 'Reset', show: true },
+    { icon: <SaveAlt />, name: 'Download data', show: false },
+    { icon: <FlipToBack />, name: 'Flip card', show: true},
 ]
 
 class Layout extends React.Component {
@@ -48,18 +49,21 @@ class Layout extends React.Component {
         })
         event.preventDefault()
     }
-    handleSpeedDialAction = (type, options, molecules) => event => {
+    handleSpeedDialAction = (type, options, molecules, callback) => event => {
         switch (type) {
             case 'Analize':
-                runASPRALign( options, molecules )
-                .then(res=> console.log( res ))
-                .catch(err => console.log( err ))
+                runASPRALign(options, molecules)
+                    .then(res => callback(res.data))
+                    .catch(err => console.log(err))
                 break;
             case 'Reset':
                 //Reset conffile and options
                 break;
             case 'Download data':
                 //Action download outputted tree
+                break;
+            case 'Flip card':
+                //Show tree or show text
                 break;
             default:
                 break;
@@ -69,7 +73,7 @@ class Layout extends React.Component {
 
     render() {
         const { children, classes, location } = this.props
-        const { open, dialOpen, dialShow } = this.state
+        const { open, dialOpen } = this.state
 
         const ListDrawer = (
             <>
@@ -125,17 +129,16 @@ class Layout extends React.Component {
                             className={classes.speedDial}
                             ariaLabel="Menu"
                             onClick={this.expandSpeedDial}
-                            onFocus={this.expandSpeedDial}
                             open={dialOpen}
                             direction='up'
                             icon={<SpeedDialIcon openIcon={<Edit />} />}
                         >
-                            {speedDialActions.map(actions => (
+                            {speedDialActions.map(actions => (actions.show&&
                                 <SpeedDialAction
                                     key={actions.name}
                                     icon={actions.icon}
                                     tooltipTitle={actions.name}
-                                    onClick={this.handleSpeedDialAction(actions.name, options.opt, options.getMoleculesArray() )}
+                                    onClick={this.handleSpeedDialAction(actions.name, options.opt, options.getMoleculesArray(), options.outTreeOrDistance)}
                                 />
                             ))}
                         </SpeedDial>

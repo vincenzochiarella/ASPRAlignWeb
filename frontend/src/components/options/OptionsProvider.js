@@ -30,6 +30,8 @@ class OptionsProvider extends React.Component {
         }, 
         validateOptions: true,
         resolvedOutput: '',
+        downloadable: false,
+        flippable: false,
         getMoleculesArray: () => {            
             if(this.state.opt.align){
                 return {
@@ -107,6 +109,11 @@ class OptionsProvider extends React.Component {
             event.persist()
             event.preventDefault()
         },
+        outTreeOrDistance: ( tree ) =>{
+            this.setState({
+                resolvedOutput: tree
+            })
+        }
         
     }
     render() {

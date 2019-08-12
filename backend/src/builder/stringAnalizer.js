@@ -7,10 +7,10 @@ const closeChilds = new RegExp(/\),/,'g')   // ),
 const closeChildsNoCom = new RegExp(/\}\]\)/,'g')//)
 const closeParents = new RegExp(/\)\]/,'g') // )]
 module.exports.parseToJSONTree = function toJSONTree ( out ) {       
-    out = out.replace(createNode,"{ name:'")        // convert (" in { name:'
-            .replace(closeNode,"'")                 // convert " in '                       
+    out = out.replace(createNode,'{ "name":"')        // convert (" in { name:'
+            .replace(closeNode,'"')                 // convert " in '                       
             .replace(noChilds, "}")                // convert , [] in }
-            .replace(createChilds,", children: [")   // convert , [ in , children: [
+            .replace(createChilds,', "children": [')   // convert , [ in , children: [
             .replace(closeChilds,"},")
             .replace(closeParents,"}]")
             .replace(closeChildsNoCom,"}]}")
