@@ -9,6 +9,7 @@ import * as ROUTES from '../../constants/routes'
 
 import { OptionsContext } from '../options/OptionsProvider'
 import { runASPRALign } from '../../controllers/OptionsController'
+import DownloadManager from '../../components/configuration/Downloader'
 
 
 const styles = theme => ({
@@ -28,13 +29,20 @@ class Layout extends React.Component {
         this.state = {
             open: false,
             dialOpen: false,
-            dialShow: false
+            dialShow: false,
+            openDownloader: false
         }
         this.expandSpeedDial = this.expandSpeedDial.bind(this)
+        this.handleDownloader = this.handleDownloader.bind(this)
     }
     handleMenuOpen = () => {
         this.setState({
             open: !this.state.open
+        })
+    }
+    handleDownloader = () => {
+        this.setState({
+            openDownloader: !this.state.openDownloader
         })
     }
     expandSpeedDial = event => {
@@ -54,7 +62,7 @@ class Layout extends React.Component {
                 //Reset conffile and options
                 break;
             case 'Download data':
-                //Action download outputted tree
+                this.handleDownloader()
                 break;
             case 'Flip card':
                 callback()
@@ -67,7 +75,7 @@ class Layout extends React.Component {
 
     render() {
         const { children, classes, location } = this.props
-        const { open, dialOpen } = this.state
+        const { open, dialOpen, openDownloader } = this.state
 
         const ListDrawer = (
             <>
@@ -116,6 +124,9 @@ class Layout extends React.Component {
             <main className={classes.content}>
                 {children}
             </main>
+            <DownloadManager 
+                showDownloaderM={openDownloader}
+                handleDownloaderM={this.handleDownloader}/>
             <OptionsContext.Consumer>
                 {options => <>
                     <Slide in={options.validation.isMoleculeCorrect && options.validation.isOptionCorrect}>

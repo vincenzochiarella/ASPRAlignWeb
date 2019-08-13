@@ -7,11 +7,11 @@ import Graph from '../../components/graph'
 import InputMolecule from '../../components/input'
 import Options from '../../components/options/index'
 import { OptionsContext } from '../../components/options/OptionsProvider'
-import ConfFile from '../../components/options/ConfFile'
+import ConfFile from '../../components/configuration/ConfFile'
 
 const style = theme => ({
     fixedHeight: {
-        height: '50vh'
+        height: '90vh'
     },
     speedDial: {
         position: 'absolute',
@@ -23,42 +23,26 @@ class Analize extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            showOptions: false,
-            FLAG_OPEN: true,
-            savedConfFile: false,
+            showOptions: false
         }
         this.showOptions = this.showOptions.bind(this)
-        this.onCloseDialog = this.onCloseDialog.bind(this)
     }
     showOptions() {
         this.setState({
             showOptions: !this.state.showOptions
         })
     }
-    onCloseDialog() {
-        this.setState({
-            FLAG_OPEN: false
-        })
-    }
-    onSaveConfigFile = (config) => {
-        this.setState({
-            configfile: config,
-            savedConfFile: true
-        })
-    }
 
     render() {
         const { classes } = this.props
-        const { showOptions, savedConfFile, FLAG_OPEN } = this.state
+        const { showOptions } = this.state
 
         return (
             <>
                 <OptionsContext.Consumer>
                     {options =>
                         <>
-                            <ConfFile
-                                showConfigFile={options.opt.useconffile && !savedConfFile && FLAG_OPEN}
-                                closeDialog={this.onCloseDialog} />
+                            <ConfFile />
                             <Grid container alignItems='stretch' direction='column' spacing={4} justify='center'>
                                 <Grid item lg md sm>
                                     <InputMolecule showOptions={this.showOptions} />
@@ -66,10 +50,7 @@ class Analize extends React.Component {
                                 {showOptions && <Grid item lg md sm>
                                     <Zoom in={showOptions}>
                                         <Paper elevation={8}>
-                                            <Options
-                                                editConfigFile={this.onEditConfiFile}
-                                                savedConfigFile={savedConfFile}
-                                            />
+                                            <Options/>
                                         </Paper>
                                     </Zoom>
                                 </Grid>}
@@ -86,7 +67,11 @@ class Analize extends React.Component {
                                                 <Graph tree={options.resolved.tree} /> 
                                             </Paper>
                                             <Paper key='back'>
-                                                <ReactJson src={JSON.parse(options.resolved.tree)} />
+                                                <ReactJson 
+                                                    src={JSON.parse(options.resolved.tree)}
+                                                    name={false}
+                                                    displayDataTypes={false}
+                                                    displayObjectSize={false} />
                                             </Paper>
                                         </ReactCardFlip>
                                     </Grid>}
