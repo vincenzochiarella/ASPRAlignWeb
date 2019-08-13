@@ -7,10 +7,26 @@ const Process = require('../builder/stringBuilder')
 
 
 Options_Route.post('/analize', (req,res) =>{
-    const outGraph = Process.start(req.body.options, req.body.molecules).then( data =>{
-        res.send(data)
-    })
-    
+    Process.startAnalize(req.body.options, req.body.molecules).then( ( data ) =>{
+        res.send(data)        
+    }).catch( err=>
+        res.send(err)
+    )  
 })
+Options_Route.post('/align/all', (req,res) =>{
+    Process.startAlign(req.body.options, req.body.molecules).then( ( data ) =>{
+        res.send(data)
+    }).catch( err=>
+        res.send(err)
+    )
+})
+Options_Route.post('/align/onlydistance', (req,res) =>{
+    Process.startAlign(req.body.options, req.body.molecules).then( (data) =>{        
+        res.send(data)
+    }).catch( err=>
+        res.send(err)
+    )   
+})
+
 
 module.exports = Options_Route

@@ -1,14 +1,15 @@
 import React from 'react'
 
+import { dotBracketNotation, arcAnnotationSequence } from '../../constants/regex'
 export const OptionsContext = React.createContext()
 
 
 class OptionsProvider extends React.Component {
     state = {
         opt: {
-            align: false,
+            align: true,
             chkpair: false,
-            outdist: false,
+            outdist: true,
             showscores: false,
             alg: false,
             latexout: false,
@@ -24,30 +25,36 @@ class OptionsProvider extends React.Component {
                 crossingMism: 1
             },
             out_text: '*.txt',
-            molecule0: 'AGGG\r\n....',
-            molecule1: 'AGGG\r\n....',
-            struct: true
-        }, 
-        validateOptions: true,
-        resolvedOutput: '',
+            molecule0: `GCACGAUCGCCAAUGGAUUGUCAUUUCUGGGAAUUUGAUGGACCUUGGAAAAUGCAUU\n(3,18);(5,11);(8,16);(13,21);(24,49);(26,33);(27,29);(30,35);(37,46);(38,45);(39,42);(40,44);(47,55);(51,58)`,
+            molecule1: `AAGAGCUAUUUCCCUUAAGGGGGCACUAUUGAACUCCAUGAAACCGGAUUUGGCCCCGCGG\n(2,15);(3,13);(4,7);(10,18);(20,44);(21,26);(22,24);(28,35);(29,33);(31,34);(36,47);(41,50);(53,59);(55,61)`,
+            struct: false
+        },
+        validation: {
+            isMoleculeCorrect: true,
+            isOptionCorrect: true
+        },
+        flipped: false,
+        resolved: {
+            tree: '',
+            distance: 0.0
+        },
         downloadable: false,
-        flippable: false,
-        getMoleculesArray: () => {            
-            if(this.state.opt.align){
+        getMoleculesArray: () => {
+            if (this.state.opt.align) {
                 return {
                     "analize": [
-                        {"molecule": this.state.opt.molecule0},
-                        {"molecule": this.state.opt.molecule1}
+                        { "molecule": this.state.opt.molecule0 },
+                        { "molecule": this.state.opt.molecule1 }
                     ]
                 }
-            }else {
+            } else {
                 return {
                     "analize": [
-                        {"molecule": this.state.opt.molecule0}
+                        { "molecule": this.state.opt.molecule0 }
                     ]
                 }
             }
-            
+
         },
         changeOpts: (selected) => (event) => {
             this.setState(prevState => ({
@@ -72,7 +79,7 @@ class OptionsProvider extends React.Component {
             event.persist()
             event.preventDefault()
         },
-        resetConfFile: ( event ) => {
+        resetConfFile: (event) => {
             this.setState(prevState => ({
                 opt: {
                     ...prevState.opt,
@@ -99,9 +106,10 @@ class OptionsProvider extends React.Component {
             event.preventDefault()
         },
         changeMolecule: (event) => {
+            this.state.checkMolecule(event.target.value)
             this.setState(prevState => ({
                 ...prevState,
-                opt:{
+                opt: {
                     ...prevState.opt,
                     [event.target.id]: event.target.value
                 }
@@ -109,12 +117,47 @@ class OptionsProvider extends React.Component {
             event.persist()
             event.preventDefault()
         },
-        outTreeOrDistance: ( tree ) =>{
-            this.setState({
-                resolvedOutput: tree
-            })
+        checkMolecule: (string) => {
+            if (this.state.opt.aasinput && string.match(arcAnnotationSequence)) {
+                this.setState({ validation: { ...this.state.validation, isMoleculeCorrect: true } })
+            }
+            else if (!this.state.opt.aasinput && string.match(dotBracketNotation))
+                this.setState({ validation: { ...this.state.validation, isMoleculeCorrect: true } })
+            else
+                this.setState({ validation: { ...this.state.validation, isMoleculeCorrect: false } })
+
+        },
+        callbackResolved: (data) => {
+            if (this.state.opt.align && !this.state.opt.outdist) {
+                this.setState({
+                    resolved: {
+                        tree: data[0],
+                        distance: data[1]
+                    },
+                    downloadable: true
+                })
+            } else if (this.state.opt.align && this.state.opt.outdist){
+                this.setState({
+                    resolved: {
+                        tree: '',
+                        distance: data
+                    },
+                    downloadable: true 
+                })
+            } else {
+                this.setState({
+                    resolved: {
+                        ...this.state.resolved,
+                        tree: JSON.stringify(data)
+                    },
+                    downloadable: true
+                })
+            }
+            
+        },
+        handleFlipCard: () => {
+            this.setState({ flipped: !this.state.flipped })
         }
-        
     }
     render() {
         const { children } = this.props

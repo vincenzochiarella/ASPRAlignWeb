@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Paper, withStyles, Zoom } from '@material-ui/core'
+import { Grid, Paper, withStyles, Zoom, Typography } from '@material-ui/core'
 import ReactJson from 'react-json-view'
 import ReactCardFlip from 'react-card-flip'
 
@@ -26,10 +26,9 @@ class Analize extends React.Component {
             showOptions: false,
             FLAG_OPEN: true,
             savedConfFile: false,
-            isFlipped: false
         }
         this.showOptions = this.showOptions.bind(this)
-        this.onFlipCard = this.onFlipCard.bind(this)
+        this.onCloseDialog = this.onCloseDialog.bind(this)
     }
     showOptions() {
         this.setState({
@@ -47,16 +46,10 @@ class Analize extends React.Component {
             savedConfFile: true
         })
     }
-    onFlipCard = (event) => {
-        this.setState({
-            isFlipped: !this.state.isFlipped
-        })
-        event.preventDefault()
-    }
 
     render() {
         const { classes } = this.props
-        const { showOptions, savedConfFile, FLAG_OPEN, isFlipped } = this.state
+        const { showOptions, savedConfFile, FLAG_OPEN } = this.state
 
         return (
             <>
@@ -80,14 +73,20 @@ class Analize extends React.Component {
                                         </Paper>
                                     </Zoom>
                                 </Grid>}
-                                {options.resolvedOutput &&
+                                {options.resolved.distance!==0.0&&
                                     <Grid item lg sm>
-                                        <ReactCardFlip isFlipped={isFlipped} flipDirection="orizontal">
+                                        <Typography variant='h6'>Alignment distance: </Typography>
+                                        <Typography variant='h3' color='secondary'>{options.resolved.distance}</Typography>                                        
+                                    </Grid>
+                                }
+                                {options.resolved.tree &&
+                                    <Grid item lg sm>
+                                        <ReactCardFlip isFlipped={options.flipped} flipDirection="horizontal">
                                             <Paper className={classes.fixedHeight} key='front'>
-                                                <Graph tree={options.resolvedOutput} />
+                                                <Graph tree={options.resolved.tree} /> 
                                             </Paper>
                                             <Paper key='back'>
-                                                <ReactJson src={JSON.parse(options.resolvedOutput)} />
+                                                <ReactJson src={JSON.parse(options.resolved.tree)} />
                                             </Paper>
                                         </ReactCardFlip>
                                     </Grid>}

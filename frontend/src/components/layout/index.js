@@ -21,12 +21,6 @@ const styles = theme => ({
         right: theme.spacing(3),
     }
 })
-const speedDialActions = [
-    { icon: <Send />, name: 'Analize', show: true},
-    { icon: <Restore />, name: 'Reset', show: true },
-    { icon: <SaveAlt />, name: 'Download data', show: false },
-    { icon: <FlipToBack />, name: 'Flip card', show: true},
-]
 
 class Layout extends React.Component {
     constructor(props) {
@@ -34,7 +28,7 @@ class Layout extends React.Component {
         this.state = {
             open: false,
             dialOpen: false,
-            dialShow: false,
+            dialShow: false
         }
         this.expandSpeedDial = this.expandSpeedDial.bind(this)
     }
@@ -63,7 +57,7 @@ class Layout extends React.Component {
                 //Action download outputted tree
                 break;
             case 'Flip card':
-                //Show tree or show text
+                callback()
                 break;
             default:
                 break;
@@ -116,15 +110,15 @@ class Layout extends React.Component {
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <Drawer open={open} onClose={this.handleMenuOpen} docked={true}>
+            <Drawer open={open} onClose={this.handleMenuOpen} >
                 {ListDrawer}
             </Drawer>
             <main className={classes.content}>
                 {children}
             </main>
             <OptionsContext.Consumer>
-                {options =>
-                    <Slide in={options.validateOptions}>
+                {options => <>
+                    <Slide in={options.validation.isMoleculeCorrect && options.validation.isOptionCorrect}>
                         <SpeedDial
                             className={classes.speedDial}
                             ariaLabel="Menu"
@@ -133,16 +127,37 @@ class Layout extends React.Component {
                             direction='up'
                             icon={<SpeedDialIcon openIcon={<Edit />} />}
                         >
-                            {speedDialActions.map(actions => (actions.show&&
+                            {(options.validation.isMoleculeCorrect && options.validation.isOptionCorrect) &&
                                 <SpeedDialAction
-                                    key={actions.name}
-                                    icon={actions.icon}
-                                    tooltipTitle={actions.name}
-                                    onClick={this.handleSpeedDialAction(actions.name, options.opt, options.getMoleculesArray(), options.outTreeOrDistance)}
+                                    key={'Analize'}
+                                    icon={<Send />}
+                                    tooltipTitle={'Analize'}
+                                    onClick={this.handleSpeedDialAction('Analize', options.opt, options.getMoleculesArray(), options.callbackResolved)}
+                                />}
+                            {(options.validation.isMoleculeCorrect && options.validation.isOptionCorrect) &&
+                                <SpeedDialAction
+                                    key={'Reset'}
+                                    icon={<Restore />}
+                                    tooltipTitle={'Reset'}
+                                    onClick={this.handleSpeedDialAction('Reset', options.opt, options.getMoleculesArray(), options.callbackResolved)}
                                 />
-                            ))}
+                            }
+                            {options.downloadable &&
+                                <SpeedDialAction
+                                    key={'Download data'}
+                                    icon={<SaveAlt />}
+                                    tooltipTitle={'Download data'}
+                                    onClick={this.handleSpeedDialAction('Download data', '','','')}
+                                />}
+                            {options.downloadable &&
+                                <SpeedDialAction
+                                    key={'Flip card'}
+                                    icon={<FlipToBack />}
+                                    tooltipTitle={'Flip card'}
+                                    onClick={this.handleSpeedDialAction('Flip card', '', '', options.handleFlipCard)}
+                                />}
                         </SpeedDial>
-                    </Slide>}
+                    </Slide></>}
             </OptionsContext.Consumer>
 
         </>)

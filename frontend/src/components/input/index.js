@@ -5,12 +5,15 @@ import { dotBracketNotation, arcAnnotationSequence } from '../../constants/regex
 import { OptionsContext } from '../../components/options/OptionsProvider'
 
 class Input extends React.Component {
+
     validateInput = (aas, string) => {
         if (string) {
-            if (aas && string.match(arcAnnotationSequence))
+            if (aas && string.match(arcAnnotationSequence)) {
                 return false
-            else if (string.match(dotBracketNotation))
+            }
+            else if (!aas && string.match(dotBracketNotation)) {
                 return false
+            }
             else
                 return true
         }

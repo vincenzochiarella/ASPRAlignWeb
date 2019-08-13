@@ -29,27 +29,28 @@ class Options extends React.Component {
                                     />
                                     <Divider />
                                 </Grid>
-                                {options.opt.align&&<><Grid item >
+                                <Grid item >
                                     <FormControlLabel
                                         control={<Checkbox onClick={options.changeOpts('chkpair')} checked={options.opt.chkpair} />}
                                         label="Check the presence of only standard Watson-Crick and wobble base pairing (disabled by default)"
                                     />
                                     <Divider />
                                 </Grid>
+                                {options.opt.align&&<>
                                 <Grid item >
                                     <FormControlLabel
                                         control={<Checkbox onClick={options.changeOpts('outdist')} checked={options.opt.outdist} />}
                                         label="Output only distance, no alignment tree"
                                     />
                                     <Divider />
-                                </Grid>
-                                <Grid item >
+                                </Grid></>}
+                                {/* <Grid item >
                                     <FormControlLabel
                                         control={<Checkbox onClick={options.changeOpts('showscores')} checked={options.opt.showscores} />}
                                         label="Show current values of edit scores used for alignment"
                                     />
                                     <Divider />
-                                </Grid></>}
+                                </Grid> */}
                                 <Grid item >
                                     <FormControlLabel
                                         control={<Checkbox onClick={options.changeOpts('alg')} checked={options.opt.alg} />}
