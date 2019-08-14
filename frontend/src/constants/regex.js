@@ -4,3 +4,4 @@ export const dotBracketNotation =  /[gaucAUGC]*(?:(?:\n)|(?:\r\n))[\.\[\]\(\)\{\
 export const arcAnnotationSequence = /[gaucAUGC]*(?:(?:\n)|(?:\r\n))(\([0-9]+\,[0-9]+\)(\;?))+$/
 
 export const extensionTxt = /^[a-zA-Z0-9]+\.txt($|\n)/
+export const extensionTex = /^[a-zA-Z0-9]+\.tex($|\n)/

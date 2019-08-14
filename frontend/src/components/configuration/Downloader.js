@@ -1,5 +1,4 @@
 import React from 'react'
-import DownloadLink from 'react-download-link'
 import {
     Dialog, DialogTitle, DialogContent, DialogActions,
     Fab, TextField, Grid
@@ -7,15 +6,33 @@ import {
 import { SaveAlt } from '@material-ui/icons'
 import { OptionsContext } from '../options/OptionsProvider'
 
+import { extensionTxt } from '../../constants/regex'
+
 class Downloader extends React.Component {
     state = {
         fileName: '',
-        onChangeFilename: (event) => { this.setState({ fileName: event.target.value }) }
+        disableDown: true,
+        onChangeFilename: (event) => { 
+            this.setState({ fileName: event.target.value })
+            if(event.target.value.match(extensionTxt))
+               this.setState({ disableDown: false})
+            else
+               this.setState({ disableDown: true})
+        },
+        downloadTxtFile: (tree) => event => {
+            const element = document.createElement("a");
+            const file = new Blob([tree], { type: 'text/plain' });
+            element.href = URL.createObjectURL(file);
+            element.download = this.state.fileName;
+            document.body.appendChild(element); // Required for this to work in FireFox
+            element.click();
+            event.preventDefault()
+        }
     }
     render() {
 
         const { showDownloaderM, handleDownloaderM } = this.props
-        const { fileName, onChangeFilename } = this.state
+        const { fileName, onChangeFilename, disableDown } = this.state
         return (
             <Dialog open={showDownloaderM} onClose={handleDownloaderM}>
                 <DialogTitle> Download file </DialogTitle>
@@ -23,6 +40,7 @@ class Downloader extends React.Component {
                     <Grid container justify='center'>
                         <Grid item>
                             <TextField
+                                variant='outlined'
                                 value={fileName}
                                 label='Please insert name of file'
                                 onChange={onChangeFilename}
@@ -30,10 +48,13 @@ class Downloader extends React.Component {
                         </Grid>
                     </Grid>
 
-
                 </DialogContent>
                 <DialogActions>
-                        <Fab><SaveAlt/></Fab>                    
+                    <OptionsContext.Consumer>
+                        {options =>
+                            <Fab disabled={disableDown} onClick={this.state.downloadTxtFile(options.resolved.tree)} color='secondary'><SaveAlt /></Fab>
+                        }
+                    </OptionsContext.Consumer>
                 </DialogActions>
             </Dialog>
         )

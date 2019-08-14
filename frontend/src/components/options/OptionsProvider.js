@@ -7,14 +7,12 @@ export const OptionsContext = React.createContext()
 class OptionsProvider extends React.Component {
     state = {
         opt: {
-            align: true,
-            chkpair: false,
-            outdist: true,
-            showscores: false,
+            align: false,
+            struct: true,
             alg: false,
-            latexout: false,
-            out: false,
-            aasinput: true,
+            chkpair: false,
+            outdist: false,
+            aasinput: false,
             useconffile: false,
             showConfForm: false,
             conffile: {
@@ -25,20 +23,18 @@ class OptionsProvider extends React.Component {
                 insertHair: 100,
                 crossingMism: 1
             },
-            out_text: '*.txt',
             molecule1: `GCACGAUCGCCAAUGGAUUGUCAUUUCUGGGAAUUUGAUGGACCUUGGAAAAUGCAUU\n(3,18);(5,11);(8,16);(13,21);(24,49);(26,33);(27,29);(30,35);(37,46);(38,45);(39,42);(40,44);(47,55);(51,58)`,
             molecule0: `AAGAGCUAUUUCCCUUAAGGGGGCACUAUUGAACUCCAUGAAACCGGAUUUGGCCCCGCGG\n(2,15);(3,13);(4,7);(10,18);(20,44);(21,26);(22,24);(28,35);(29,33);(31,34);(36,47);(41,50);(53,59);(55,61)`,
-            struct: false
         },
         validation: {
             isMoleculeCorrect: true,
             isOptionCorrect: false
         },
-        flipped: false,
         resolved: {
             tree: '',
             distance: 0.0
         },
+        flipped: false,
         downloadable: false,
         getMoleculesArray: () => {
             if (this.state.opt.align) {
@@ -88,6 +84,8 @@ class OptionsProvider extends React.Component {
                             alg: true
                         }
                     }))
+                    break;
+                default:
                     break;
             }
         },
