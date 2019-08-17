@@ -8,7 +8,7 @@ import {
 } from '@material-ui/icons'
 
 import { OptionsContext } from '../options/OptionsProvider'
-import { extensionTxt } from '../../constants/regex'
+import { filename as FILEN } from '../../constants/regex'
 
 const style = theme => ({
     button: {
@@ -40,7 +40,7 @@ class Options extends React.Component {
 
     validateInput = (filename) => {
         if (filename)
-            if (filename.match(extensionTxt))
+            if (filename.match(FILEN))
                 return false
         return true
     }
