@@ -147,7 +147,7 @@ class Layout extends React.Component {
                             {location.pathname.substr(1).toUpperCase()}
                         </Typography>
                         <div className={classes.chips}>
-                            {this.getChips(options).map(chip =>
+                            {location.pathname.substr(1)==='analizer'&&this.getChips(options).map(chip =>
                                 (<Chip
                                     variant='outlined'
                                     avatar={<Avatar>{chip.icon}</Avatar>}
