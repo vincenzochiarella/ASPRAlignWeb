@@ -1,6 +1,6 @@
 import React from 'react'
-import { Fab, Grid, TextField, Zoom } from '@material-ui/core'
-import { Settings } from '@material-ui/icons'
+import { Grid, TextField, Zoom } from '@material-ui/core'
+
 import { dotBracketNotation, arcAnnotationSequence } from '../../constants/regex'
 import { OptionsContext } from '../../components/options/OptionsProvider'
 
@@ -18,14 +18,12 @@ class Input extends React.Component {
                 return true
         }
     }
-    onShowOptions = () => {
-        this.props.showOptions()
-    }
+
     render() {
         return (
             <>
                 <OptionsContext.Consumer>
-                    {options => <Grid container direction='row' alignContent='center' justify='center' spacing={1}>
+                    {options => 
                         <Grid container item lg={11} md={11} xs={11} alignItems='stretch' spacing={4}>
                             <Grid item lg={options.opt.align ? 6 : 12} md={12} xs={11}>
                                 <TextField
@@ -57,16 +55,7 @@ class Input extends React.Component {
                                     />
                                 </Grid>
                             </Zoom>}
-                        </Grid>
-                        <Grid container item lg={1} md={1} xs={1} alignItems='stretch'>
-                            <Grid item >
-                                <Fab onClick={this.onShowOptions} color='secondary'>
-                                    <Settings />
-                                </Fab>
-                            </Grid>
-                        </Grid>
-
-                    </Grid>}
+                        </Grid>}
                 </OptionsContext.Consumer>
             </>
         )

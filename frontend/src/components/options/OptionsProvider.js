@@ -27,8 +27,7 @@ class OptionsProvider extends React.Component {
             molecule0: `AAGAGCUAUUUCCCUUAAGGGGGCACUAUUGAACUCCAUGAAACCGGAUUUGGCCCCGCGG\n(2,15);(3,13);(4,7);(10,18);(20,44);(21,26);(22,24);(28,35);(29,33);(31,34);(36,47);(41,50);(53,59);(55,61)`,
         },
         validation: {
-            isMoleculeCorrect: true,
-            isOptionCorrect: false
+            isMoleculeCorrect: true
         },
         resolved: {
             tree: '',
@@ -98,6 +97,7 @@ class OptionsProvider extends React.Component {
             }))
             if(selected==='useconffile')
                 this.setState(prevState =>({ opt:{ ...prevState.opt, showConfForm: !prevState.opt.showConfForm }}))
+            this.state.checkMolecule()
             event.preventDefault()
         },
         changeConfFile: (event) => {
@@ -139,18 +139,8 @@ class OptionsProvider extends React.Component {
             })
             event.preventDefault()
         },
-        changeOutFile: (event) => {
-            this.setState(prevState => ({
-                opt: {
-                    ...prevState.opt,
-                    out_text: event.target.value
-                }
-            }))
-            event.persist()
-            event.preventDefault()
-        },
         changeMolecule: (event) => {
-            this.state.checkMolecule(event.target.value)
+            this.state.checkMolecule()
             this.setState(prevState => ({
                 ...prevState,
                 opt: {
@@ -161,14 +151,19 @@ class OptionsProvider extends React.Component {
             event.persist()
             event.preventDefault()
         },
-        checkMolecule: (string) => {
-            if (this.state.opt.aasinput && string.match(arcAnnotationSequence)) {
-                this.setState({ validation: { ...this.state.validation, isMoleculeCorrect: true } })
-            }
+        checkMolecule: () => {
+            if(this.state.opt.aasinput&&this.state.opt.align&&this.state.opt.molecule0.match(arcAnnotationSequence)&&this.state.opt.molecule1.match(arcAnnotationSequence))
+                this.setState({ validation: { isMoleculeCorrect: true }})
+            else if(this.state.opt.aasinput&&!this.state.opt.align&&this.state.opt.molecule0.match(arcAnnotationSequence)) 
+                this.setState({ validation: { isMoleculeCorrect: true }})
+            else if(!this.state.opt.aasinput&&this.state.opt.align&&this.state.opt.molecule0.match(arcAnnotationSequence)&&this.state.opt.molecule1.match(arcAnnotationSequence))
+                this.setState({ validation: { isMoleculeCorrect: true }})
+            else if(!this.state.opt.aasinput&&!this.state.opt.align&&this.state.opt.molecule0.match(arcAnnotationSequence)) 
+                this.setState({ validation: { isMoleculeCorrect: true }})
             else if (!this.state.opt.aasinput && string.match(dotBracketNotation))
-                this.setState({ validation: { ...this.state.validation, isMoleculeCorrect: true } })
+                this.setState({ validation: { isMoleculeCorrect: true } })
             else
-                this.setState({ validation: { ...this.state.validation, isMoleculeCorrect: false } })
+                this.setState({ validation: { isMoleculeCorrect: false } })
 
         },
         callbackResolved: (data) => {
@@ -198,16 +193,6 @@ class OptionsProvider extends React.Component {
                 })
             }
             
-        },
-        handleCorrectOptions: ( event )=>{
-            this.setState(preState=>({
-                validation:{
-                    ...preState.validation,
-                    isOptionCorrect: !preState.validation.isOptionCorrect
-                }
-            }))
-            event.persist()
-            event.preventDefault()
         },
         handleFlipCard: () => {
             this.setState({ flipped: !this.state.flipped })
