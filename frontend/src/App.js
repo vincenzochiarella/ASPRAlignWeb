@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { HashRouter, Switch, Route } from 'react-router-dom'
 import Landing from './pages/landing'
 import Analize from './pages/analize'
 import Credits from './pages/credits'
@@ -10,11 +10,11 @@ import * as ROUTES from './constants/routes'
 
 import OptionsProvider from '../src/components/options/OptionsProvider'
 
+
 class App extends React.Component {
   render() {
     return (
-
-      <BrowserRouter>
+      <HashRouter>
         <OptionsProvider >
           <Layout>
             <Container maxWidth='lg'>
@@ -27,7 +27,7 @@ class App extends React.Component {
             </Container>
           </Layout>
         </OptionsProvider>
-      </BrowserRouter>
+      </HashRouter>
     )
   }
 }

@@ -27,7 +27,7 @@ class OptionsProvider extends React.Component {
             molecule0: `AAGAGCUAUUUCCCUUAAGGGGGCACUAUUGAACUCCAUGAAACCGGAUUUGGCCCCGCGG\n(2,15);(3,13);(4,7);(10,18);(20,44);(21,26);(22,24);(28,35);(29,33);(31,34);(36,47);(41,50);(53,59);(55,61)`,
         },
         validation: {
-            isMoleculeCorrect: true
+            isMoleculeCorrect: false
         },
         resolved: {
             tree: '',
@@ -52,11 +52,11 @@ class OptionsProvider extends React.Component {
             }
 
         },
-        chooseTree: ( event ) => {
-            switch(event.target.value){
+        chooseTree: (event) => {
+            switch (event.target.value) {
                 case 'align':
-                    this.setState(preState =>({
-                        opt:{
+                    this.setState(preState => ({
+                        opt: {
                             ...preState.opt,
                             align: true,
                             struct: false,
@@ -65,8 +65,8 @@ class OptionsProvider extends React.Component {
                     }))
                     break;
                 case 'struct':
-                    this.setState(preState =>({
-                        opt:{
+                    this.setState(preState => ({
+                        opt: {
                             ...preState.opt,
                             align: false,
                             struct: true,
@@ -75,8 +75,8 @@ class OptionsProvider extends React.Component {
                     }))
                     break;
                 case 'alg':
-                    this.setState(preState =>({
-                        opt:{
+                    this.setState(preState => ({
+                        opt: {
                             ...preState.opt,
                             align: false,
                             struct: false,
@@ -95,8 +95,8 @@ class OptionsProvider extends React.Component {
                     [selected]: !this.state.opt[selected]
                 }
             }))
-            if(selected==='useconffile')
-                this.setState(prevState =>({ opt:{ ...prevState.opt, showConfForm: !prevState.opt.showConfForm }}))
+            if (selected === 'useconffile')
+                this.setState(prevState => ({ opt: { ...prevState.opt, showConfForm: !prevState.opt.showConfForm } }))
             this.state.checkMolecule()
             event.preventDefault()
         },
@@ -130,12 +130,12 @@ class OptionsProvider extends React.Component {
             }))
             event.preventDefault()
         },
-        showConfFile: (event) =>{
+        showConfFile: (event) => {
             this.setState({
-                opt:{
+                opt: {
                     ...this.state.opt,
                     showConfForm: !this.state.opt.showConfForm
-                }                
+                }
             })
             event.preventDefault()
         },
@@ -152,19 +152,32 @@ class OptionsProvider extends React.Component {
             event.preventDefault()
         },
         checkMolecule: () => {
-            if(this.state.opt.aasinput&&this.state.opt.align&&this.state.opt.molecule0.match(arcAnnotationSequence)&&this.state.opt.molecule1.match(arcAnnotationSequence))
-                this.setState({ validation: { isMoleculeCorrect: true }})
-            else if(this.state.opt.aasinput&&!this.state.opt.align&&this.state.opt.molecule0.match(arcAnnotationSequence)) 
-                this.setState({ validation: { isMoleculeCorrect: true }})
-            else if(!this.state.opt.aasinput&&this.state.opt.align&&this.state.opt.molecule0.match(arcAnnotationSequence)&&this.state.opt.molecule1.match(arcAnnotationSequence))
-                this.setState({ validation: { isMoleculeCorrect: true }})
-            else if(!this.state.opt.aasinput&&!this.state.opt.align&&this.state.opt.molecule0.match(arcAnnotationSequence)) 
-                this.setState({ validation: { isMoleculeCorrect: true }})
-            else if (!this.state.opt.aasinput && string.match(dotBracketNotation))
-                this.setState({ validation: { isMoleculeCorrect: true } })
-            else
-                this.setState({ validation: { isMoleculeCorrect: false } })
-
+            if (this.state.opt.aasinput) {
+                if (this.state.opt.align) {
+                    if (this.state.opt.molecule0.match(arcAnnotationSequence) && this.state.opt.molecule1.match(arcAnnotationSequence))
+                        this.setState({ validation: { isMoleculeCorrect: true } })
+                    else
+                        this.setState({ validation: { isMoleculeCorrect: false } })
+                } else {
+                    if (this.state.opt.molecule0.match(arcAnnotationSequence))
+                        this.setState({ validation: { isMoleculeCorrect: true } })
+                    else
+                        this.setState({ validation: { isMoleculeCorrect: false } })
+                }
+            }
+            else {
+                if (this.state.opt.align) {
+                    if (this.state.opt.molecule0.match(dotBracketNotation) && this.state.opt.molecule1.match(dotBracketNotation))
+                        this.setState({ validation: { isMoleculeCorrect: true } })
+                    else
+                        this.setState({ validation: { isMoleculeCorrect: false } })
+                } else {
+                    if (this.state.opt.molecule0.match(dotBracketNotation))
+                        this.setState({ validation: { isMoleculeCorrect: true } })
+                    else
+                        this.setState({ validation: { isMoleculeCorrect: false } })
+                }
+            }
         },
         callbackResolved: (data) => {
             if (this.state.opt.align && !this.state.opt.outdist) {
@@ -175,13 +188,13 @@ class OptionsProvider extends React.Component {
                     },
                     downloadable: true
                 })
-            } else if (this.state.opt.align && this.state.opt.outdist){
+            } else if (this.state.opt.align && this.state.opt.outdist) {
                 this.setState({
                     resolved: {
                         tree: '',
                         distance: data
                     },
-                    downloadable: true 
+                    downloadable: true
                 })
             } else {
                 this.setState({
@@ -192,7 +205,7 @@ class OptionsProvider extends React.Component {
                     downloadable: true
                 })
             }
-            
+
         },
         handleFlipCard: () => {
             this.setState({ flipped: !this.state.flipped })
