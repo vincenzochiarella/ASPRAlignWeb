@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import {
     Drawer, Toolbar, AppBar, List, ListItem, ListItemText,
-    IconButton, withStyles, Slide, Typography, Chip, Avatar
+    IconButton, withStyles, Slide, Typography, Chip
 } from '@material-ui/core'
 import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab'
 import {
@@ -27,8 +27,11 @@ const styles = theme => ({
         bottom: theme.spacing(2),
         right: theme.spacing(3),
     },
-    chips: {
+    chipContainer: {
         left: theme.spacing(6)
+    },
+    chipsStyle: {
+        color: '#ffffff'
     }
 })
 
@@ -38,7 +41,6 @@ class Layout extends React.Component {
         this.state = {
             open: false,
             dialOpen: false,
-            dialShow: false,
             openDownloader: false
         }
         this.expandSpeedDial = this.expandSpeedDial.bind(this)
@@ -149,8 +151,10 @@ class Layout extends React.Component {
                         <div className={classes.chips}>
                             {location.pathname.substr(1)==='analizer'&&this.getChips(options).map(chip =>
                                 (<Chip
-                                    variant='outlined'
-                                    avatar={<Avatar>{chip.icon}</Avatar>}
+                                    size='small'
+                                    color='secondary'
+                                    className={classes.chipsStyle}
+                                    icon={chip.icon}
                                     label={chip.name} />)
                             )}
                         </div>
@@ -167,7 +171,7 @@ class Layout extends React.Component {
                     showDownloaderM={openDownloader}
                     handleDownloaderM={this.handleDownloader} />
 
-                <Slide in={options.validation.isMoleculeCorrect && options.validation.isOptionCorrect}>
+                <Slide in={options.validation.isMoleculeCorrect }>
                     <SpeedDial
                         className={classes.speedDial}
                         ariaLabel="Menu"
@@ -176,14 +180,14 @@ class Layout extends React.Component {
                         direction='up'
                         icon={<SpeedDialIcon openIcon={<Edit />} />}
                     >
-                        {(options.validation.isMoleculeCorrect && options.validation.isOptionCorrect) &&
+                        {(options.validation.isMoleculeCorrect) &&
                             <SpeedDialAction
                                 key={'Analize'}
                                 icon={<Send />}
                                 tooltipTitle={'Analize'}
                                 onClick={this.handleSpeedDialAction('Analize', options.opt, options.getMoleculesArray(), options.callbackResolved)}
                             />}
-                        {(options.validation.isMoleculeCorrect && options.validation.isOptionCorrect) &&
+                        {(options.validation.isMoleculeCorrect) &&
                             <SpeedDialAction
                                 key={'Reset'}
                                 icon={<Restore />}

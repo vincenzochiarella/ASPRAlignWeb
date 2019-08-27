@@ -20,6 +20,11 @@ const theme = createMuiTheme({
         action: {
             main: '#fdd835'
         }
+    },
+    typography:{
+        fontFamily: [
+            "'Hepta Slab'", 'serif'
+        ]
     }
 })
 ReactDOM.render(
