@@ -2,12 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import {
     Drawer, Toolbar, AppBar, List, ListItem, ListItemText,
-    IconButton, withStyles, Slide, Typography, Chip
+    IconButton, withStyles, Slide, Typography
 } from '@material-ui/core'
 import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab'
 import {
-    Menu, Edit, Send, Restore, SaveAlt, FlipToBack, Share,
-    DragIndicator, SettingsEthernet, TextFields, AttachFile
+    Menu, Edit, Send, Restore, SaveAlt, FlipToBack
 } from '@material-ui/icons'
 import { compose } from 'recompose'
 import { withRouter } from 'react-router-dom'
@@ -26,12 +25,6 @@ const styles = theme => ({
         position: 'fixed',
         bottom: theme.spacing(2),
         right: theme.spacing(3),
-    },
-    chipContainer: {
-        left: theme.spacing(6)
-    },
-    chipsStyle: {
-        color: '#ffffff'
     }
 })
 
@@ -83,26 +76,7 @@ class Layout extends React.Component {
         }
         event.preventDefault()
     }
-    getChips = (options) => {
-        var chips = []
-        if (options.opt.struct)
-            chips.push({ name: 'Structural', icon: <Share /> })
-        if (options.opt.align)
-            chips.push({ name: 'Alignment', icon: <Share /> })
-        if (options.opt.alg)
-            chips.push({ name: 'Algebraic', icon: <Share /> })
-        if (options.opt.chkpair)
-            chips.push({ name: 'Checkpair', icon: <DragIndicator /> })
-        if (options.opt.outdist)
-            chips.push({ name: 'Only distance', icon: <SettingsEthernet /> })
-        if (options.opt.aasinput)
-            chips.push({ name: 'Arc Annotated Sequence', icon: <TextFields /> })
-        else if (!options.opt.aasinput)
-            chips.push({ name: 'Dot-Bracket Notation', icon: <TextFields /> })
-        if (options.opt.useconffile)
-            chips.push({ name: 'Conffile', icon: <AttachFile /> })
-        return chips
-    }
+
 
     render() {
         const { children, classes, location } = this.props
@@ -148,17 +122,6 @@ class Layout extends React.Component {
                         <Typography component="h1" variant="h6" color="inherit" noWrap>
                             {location.pathname.substr(1).toUpperCase()}
                         </Typography>
-                        <div className={classes.chips}>
-                            {location.pathname.substr(1)==='analizer'&&this.getChips(options).map(chip =>
-                                (<Chip
-                                    size='small'
-                                    color='secondary'
-                                    className={classes.chipsStyle}
-                                    icon={chip.icon}
-                                    label={chip.name} />)
-                            )}
-                        </div>
-
                     </Toolbar>
                 </AppBar>
                 <Drawer open={open} onClose={this.handleMenuOpen} >
@@ -171,7 +134,7 @@ class Layout extends React.Component {
                     showDownloaderM={openDownloader}
                     handleDownloaderM={this.handleDownloader} />
 
-                <Slide in={options.validation.isMoleculeCorrect }>
+                <Slide in={options.checkMolecule()}>
                     <SpeedDial
                         className={classes.speedDial}
                         ariaLabel="Menu"
@@ -180,14 +143,14 @@ class Layout extends React.Component {
                         direction='up'
                         icon={<SpeedDialIcon openIcon={<Edit />} />}
                     >
-                        {(options.validation.isMoleculeCorrect) &&
+                        {(options.checkMolecule()) &&
                             <SpeedDialAction
                                 key={'Analize'}
                                 icon={<Send />}
                                 tooltipTitle={'Analize'}
                                 onClick={this.handleSpeedDialAction('Analize', options.opt, options.getMoleculesArray(), options.callbackResolved)}
                             />}
-                        {(options.validation.isMoleculeCorrect) &&
+                        {(options.checkMolecule()) &&
                             <SpeedDialAction
                                 key={'Reset'}
                                 icon={<Restore />}

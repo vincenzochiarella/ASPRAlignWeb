@@ -4,6 +4,7 @@ import ReactJson from 'react-json-view'
 import ReactCardFlip from 'react-card-flip'
 
 import Graph from '../../components/graph'
+import Chips from '../../components/chips'
 import Options from '../../components/options/index'
 import { OptionsContext } from '../../components/options/OptionsProvider'
 import ConfFile from '../../components/configuration/ConfFile'
@@ -21,8 +22,6 @@ const style = theme => ({
 class Analize extends React.Component {
     render() {
         const { classes } = this.props
-        // const { showOptions } = this.state
-
         return (
             <>
                 <OptionsContext.Consumer>
@@ -33,7 +32,10 @@ class Analize extends React.Component {
                                 <Grid item>
                                     <Options/>
                                 </Grid>
-                                {options.resolved.distance!==0.0&&
+                                <Grid item>
+                                    <Chips options={options} />
+                                </Grid>
+                                {options.resolved.distance!==0.0&&options.opt.align&&
                                     <Grid item lg sm>
                                         <Typography variant='h6'>Alignment distance: </Typography>
                                         <Typography variant='h3' color='secondary'>{options.resolved.distance}</Typography>                                        
