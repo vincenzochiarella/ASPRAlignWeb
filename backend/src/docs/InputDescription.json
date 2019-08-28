@@ -1,0 +1,21 @@
+{
+    "title": "Inputs",
+    "body": [
+        {
+            "paragraph":"The default input notatiotion is Dot Bracket Notation, reference guide below"
+        },
+        {
+            "paragraph": "An alternative input file format is Arc Annotated Sequence, similar to the Extended Dot-Bracket Notation format in which the weak bonds are expressed as a list \n (i_1,j_1);(i_2,j_2); ... ;(i_m,j_m) \n where each index i_k, j_k belongs to the interval [1,n] (n is the length of the primary sequence) and i_k < j_k + 1 for all k."
+        }
+    ],
+    "refs": [
+        {
+            "text": "DotBracket Notation guide",
+            "link": "https://www.tbi.univie.ac.at/RNA/ViennaRNA/doc/html/rna_structure_notations.html"
+        },
+        {
+            "text": "Arc Annotated Sequence guide",
+            "link": "http://www.akt.tu-berlin.de/fileadmin/fg34/publications-akt/fsttcs02.pdf"
+        }
+    ]
+}

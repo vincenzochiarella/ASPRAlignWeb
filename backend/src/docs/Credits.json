@@ -1,0 +1,18 @@
+{
+    "title":"Credits",
+    "body":[{
+        "paragraph":"Algorithm Developed By BioShape and Data Science Lab at the University of Camerino"        
+    },{
+        "paragraph":"Web view Developed By Vincenzo Chiarella in Nodejs using React framework for a Thesis Proposal"
+    }],
+    "refs":[{
+        "text":"Luca Tesei",
+        "link":"https://docenti.unicam.it/pdett.aspx?ids=N&tv=d&UteId=572"
+    },{
+        "text":"Michela Quadrini",
+        "link":"https://docenti.unicam.it/pdett.aspx?ids=N&tv=d&UteId=1142"
+    },{
+        "text":"Merelli Emanuela",
+        "link":"https://docenti.unicam.it/pdett.aspx?ids=N&tv=d&UteId=207"
+    }]
+}
