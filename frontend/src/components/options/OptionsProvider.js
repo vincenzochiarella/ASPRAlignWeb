@@ -7,8 +7,8 @@ export const OptionsContext = React.createContext()
 class OptionsProvider extends React.Component {
     state = {
         opt: {
-            align: false,
-            struct: true,
+            align: true,
+            struct: false,
             alg: false,
             chkpair: false,
             outdist: false,

@@ -1,12 +1,10 @@
 import React from 'react'
 import {
     Grid, FormControlLabel, Switch, Radio, IconButton,
-    Paper, Typography, withStyles, RadioGroup, Box, Icon,
-    Tab, Tabs
+    Paper, Typography, withStyles, RadioGroup, Box, Tab, Tabs
 } from '@material-ui/core'
 import {
-    Edit, CheckCircle, Cancel,
-    Share, TextFields, SettingsEthernet
+    Edit, Share, TextFields, SettingsEthernet
 } from '@material-ui/icons'
 
 import InputMolecule from '../input'
@@ -126,7 +124,7 @@ class Options extends React.Component {
                         <div className={classes.tabStyle}>
                             <Paper margin={4}>
                                 <AntTabs value={currentTab} onChange={handleTabChange} centered>
-                                    <AntTab label='Type of tree' icon={<Share />} />
+                                    <AntTab label='Operation' icon={<Share />} />
                                     <AntTab label='Molecule input' icon={<TextFields />} />
                                     <AntTab label='Other options' icon={<SettingsEthernet />} />
                                 </AntTabs>
@@ -138,9 +136,9 @@ class Options extends React.Component {
                                         value={this.getTypeOfTreeOutput(options)}
                                         onChange={options.chooseTree}
                                     >
-                                        <FormControlLabel value="align" control={<Radio />} label="Alignment tree" />
-                                        <FormControlLabel value="struct" control={<Radio />} label="Structural tree" />
-                                        <FormControlLabel value="alg" control={<Radio />} label="Algebraic tree" />
+                                        <FormControlLabel value="align" control={<Radio />} label="Align Two Molecules" />
+                                        <FormControlLabel value="struct" control={<Radio />} label="Generate Structural Tree" />
+                                        <FormControlLabel value="alg" control={<Radio />} label="Generate Algebraic Tree" />
                                     </RadioGroup>
                                 </TabPanel>
                                 <TabPanel index={1} value={currentTab}>
@@ -178,27 +176,27 @@ class Options extends React.Component {
                                                     <Typography variant='h6'> Show only distance (if not specified it depends on default configuration) </Typography>
                                                 </Grid>
                                             </Grid>}
-                                        {options.opt.align &&
-                                            <Grid item container alignItems='center'>
-                                                <Grid item>
-                                                    {options.opt.useconffile ? <Icon color='primary'><CheckCircle /></Icon> : <Icon color='error'><Cancel /></Icon>}
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography variant='h6'> Configuration file </Typography>
-                                                </Grid>
-                                                <Grid item>
-                                                    <IconButton onClick={options.showConfFile}><Edit /></IconButton>
-                                                </Grid>
-                                            </Grid>}
                                         <Grid item container direction='row'>
                                             <Grid item>
                                                 <Switch checked={options.opt.chkpair} onClick={options.changeOpts('chkpair')} />
                                             </Grid>
                                             <Grid item>
                                                 <Typography variant='h6'>
-                                                    Check precence of Watson and Crick pair
+                                                    Check Precence Of Only Watson and Crick Pairs
                                                 </Typography>
                                             </Grid>
+                                        {options.opt.align &&
+                                            <Grid item container alignItems='center'>
+                                                {/* <Grid item>
+                                                    {options.opt.useconffile ? <Icon color='primary'><CheckCircle /></Icon> : <Icon color='error'><Cancel /></Icon>}
+                                                </Grid> */}
+                                                <Grid item>
+                                                    <IconButton onClick={options.showConfFile}><Edit /></IconButton>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography variant='h6'> Configuration Values </Typography>
+                                                </Grid>
+                                            </Grid>}
                                         </Grid>
                                     </Grid>
                                 </TabPanel>
