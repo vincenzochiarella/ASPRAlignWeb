@@ -180,24 +180,27 @@ class OptionsProvider extends React.Component {
             if (this.state.opt.align && !this.state.opt.outdist) {
                 this.setState({
                     resolved: {
-                        tree: data[0],
-                        distance: data[1]
+                        status: data.status,
+                        tree: data.data[0],
+                        distance: data.data[1]
                     },
                     downloadable: true
                 })
             } else if (this.state.opt.align && this.state.opt.outdist) {
                 this.setState({
                     resolved: {
-                        tree: '',
-                        distance: data
+                        status: data.status,
+                        tree: null,
+                        distance: data.data
                     },
                     downloadable: true
                 })
             } else {
                 this.setState({
                     resolved: {
-                        ...this.state.resolved,
-                        tree: JSON.stringify(data)
+                        status: data.status,
+                        distance: null,
+                        tree: data.data
                     },
                     downloadable: true
                 })

@@ -22,6 +22,9 @@ module.exports.startAnalize = Elaboration = (options, input) => {
         JavaProcess.stdout.on('data', (data) => {
             arrayOut.push(data.toString())
         })
+        JavaProcess.on('exit', (code)=>{
+            console.log(code)
+        })
         JavaProcess.on('close', (close) => {
             if (!options.align) {//ulteriore check per evitare errori
                 removeTempFiles(tmpFolderName)
@@ -32,7 +35,7 @@ module.exports.startAnalize = Elaboration = (options, input) => {
         })
         JavaProcess.stderr.on('data', (data) => {
             console.log("Errore: " + data.toString())
-            // reject(data)
+            reject(data)
         });
         JavaProcess.on('error', (err) => {
             // reject(err);
