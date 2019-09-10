@@ -17,6 +17,7 @@
     "react-particles-js": "^2.7.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
+    "react-spinner": "^0.2.7",
     "recompose": "^0.30.0"
   },
   "scripts": {
