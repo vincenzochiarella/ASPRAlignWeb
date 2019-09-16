@@ -9,6 +9,7 @@ import { Container } from '@material-ui/core'
 import * as ROUTES from './constants/routes'
 
 import OptionsProvider from '../src/components/options/OptionsProvider'
+import ResultProvider from './components/options/ResultProvider';
 
 
 class App extends React.Component {
@@ -16,16 +17,18 @@ class App extends React.Component {
     return (
       <HashRouter>
         <OptionsProvider >
-          <Layout>
-            <Container maxWidth='lg'>
-              <Switch>
-                <Route exact path={ROUTES.Landing} component={Landing} />
-                <Route path={ROUTES.Analize} component={Analize} />
-                <Route path={ROUTES.Credits} component={Credits} />
-                <Route path={ROUTES.Documentation} component={Documentation} />
-              </Switch>
-            </Container>
-          </Layout>
+          <ResultProvider>
+            <Layout>
+              <Container maxWidth='lg'>
+                <Switch>
+                  <Route exact path={ROUTES.Landing} component={Landing} />
+                  <Route path={ROUTES.Analize} component={Analize} />
+                  <Route path={ROUTES.Credits} component={Credits} />
+                  <Route path={ROUTES.Documentation} component={Documentation} />
+                </Switch>
+              </Container>
+            </Layout>
+          </ResultProvider>
         </OptionsProvider>
       </HashRouter>
     )

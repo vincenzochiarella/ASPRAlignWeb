@@ -6,7 +6,7 @@ export const OptionsContext = React.createContext()
 
 class OptionsProvider extends React.Component {
     state = {
-        opt: {
+        _defaultOpt: {
             align: true,
             struct: false,
             alg: false,
@@ -23,15 +23,32 @@ class OptionsProvider extends React.Component {
                 insertHair: 100,
                 crossingMism: 1
             },
+            molecule1: '',
+            molecule0: ''
+        },
+        opt: {
+            align: true,
+            struct: false,
+            alg: false,
+            chkpair: false,
+            outdist: false,
+            aasinput: true,
+            useconffile: false,
+            showConfForm: false,
+            conffile: {
+                insertOp: 100,
+                deletingOp: 100,
+                replaceOp: 100,
+                deleteHair: 100,
+                insertHair: 100,
+                crossingMism: 1
+            },
             molecule1: `GCACGAUCGCCAAUGGAUUGUCAUUUCUGGGAAUUUGAUGGACCUUGGAAAAUGCAUU\n(3,18);(5,11);(8,16);(13,21);(24,49);(26,33);(27,29);(30,35);(37,46);(38,45);(39,42);(40,44);(47,55);(51,58)`,
             molecule0: `AAGAGCUAUUUCCCUUAAGGGGGCACUAUUGAACUCCAUGAAACCGGAUUUGGCCCCGCGG\n(2,15);(3,13);(4,7);(10,18);(20,44);(21,26);(22,24);(28,35);(29,33);(31,34);(36,47);(41,50);(53,59);(55,61)`,
         },
-        resolved: {
-            tree: '',
-            distance: 0.0
-        },
-        flipped: false,
-        downloadable: false,
+        /**
+         * @returns JSON with molecule input
+         */
         getMoleculesArray: () => {
             if (this.state.opt.align) {
                 return {
@@ -49,6 +66,9 @@ class OptionsProvider extends React.Component {
             }
 
         },
+        /**
+         * Change result ASPRAlign 
+         */
         chooseTree: (event) => {
             switch (event.target.value) {
                 case 'align':
@@ -85,6 +105,9 @@ class OptionsProvider extends React.Component {
                     break;
             }
         },
+        /**
+         * Change state with selected options
+         */
         changeOpts: (selected) => (event) => {
             this.setState(prevState => ({
                 opt: {
@@ -97,6 +120,9 @@ class OptionsProvider extends React.Component {
             this.state.checkMolecule()
             event.preventDefault()
         },
+        /**
+         * Change state with selected configuration
+         */
         changeConfFile: (event) => {
             this.setState(prevState => ({
                 opt: {
@@ -111,6 +137,9 @@ class OptionsProvider extends React.Component {
             event.persist()
             event.preventDefault()
         },
+        /**
+         * Reset configuration file to default values
+         */
         resetConfFile: (event) => {
             this.setState(prevState => ({
                 opt: {
@@ -127,6 +156,9 @@ class OptionsProvider extends React.Component {
             }))
             event.preventDefault()
         },
+        /**
+         * Control configuration file show
+         */
         showConfFile: (event) => {
             this.setState({
                 opt: {
@@ -136,6 +168,9 @@ class OptionsProvider extends React.Component {
             })
             event.preventDefault()
         },
+        /**
+         * Handle keyboard input in input form
+         */
         changeMolecule: (event) => {
             this.state.checkMolecule()
             this.setState(prevState => ({
@@ -148,7 +183,10 @@ class OptionsProvider extends React.Component {
             event.persist()
             event.preventDefault()
         },
-        checkMolecule: () => {
+        /**
+         * Use regex to check the correct syntax of input form
+         */
+        checkMolecule: () => {            
             if (this.state.opt.aasinput) {
                 if (this.state.opt.align) {
                     if (this.state.opt.molecule0.match(arcAnnotationSequence) && this.state.opt.molecule1.match(arcAnnotationSequence))
@@ -175,40 +213,6 @@ class OptionsProvider extends React.Component {
                         return false
                 }
             }
-        },
-        callbackResolved: (data) => {
-            if (this.state.opt.align && !this.state.opt.outdist) {
-                this.setState({
-                    resolved: {
-                        status: data.status,
-                        tree: data.data[0],
-                        distance: data.data[1]
-                    },
-                    downloadable: true
-                })
-            } else if (this.state.opt.align && this.state.opt.outdist) {
-                this.setState({
-                    resolved: {
-                        status: data.status,
-                        tree: null,
-                        distance: data.data
-                    },
-                    downloadable: true
-                })
-            } else {
-                this.setState({
-                    resolved: {
-                        status: data.status,
-                        distance: null,
-                        tree: data.data
-                    },
-                    downloadable: true
-                })
-            }
-
-        },
-        handleFlipCard: () => {
-            this.setState({ flipped: !this.state.flipped })
         }
     }
     render() {

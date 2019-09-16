@@ -1,6 +1,11 @@
 import axios from 'axios'
-
+/**
+ * FIXME: Change 
+ * @param {JSON} opt 
+ * @param {JSON} mols 
+ */
 export const runASPRALign = (opt, mols) => {
+    
     if (!opt.align) {
         return axios.post('options/analize', {
             options: opt,

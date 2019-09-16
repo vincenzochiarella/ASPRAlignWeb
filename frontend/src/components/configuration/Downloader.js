@@ -4,7 +4,7 @@ import {
     Fab, TextField, Grid, Select, OutlinedInput, MenuItem
 } from '@material-ui/core'
 import { SaveAlt } from '@material-ui/icons'
-import { OptionsContext } from '../options/OptionsProvider'
+import { ResultContext } from '../options/ResultProvider'
 
 import { filename as FILEN } from '../../constants/regex'
 // import { TEXT, TEX } from '../../constants/extension'
@@ -44,10 +44,10 @@ class Downloader extends React.Component {
 
     render() {
 
-        const { showDownloaderM, handleDownloaderM } = this.props
+        const { open, handleDownlaod } = this.props
         const { fileName, onChangeFilename, disableDown, extension } = this.state
         return (
-            <Dialog open={showDownloaderM} onClose={handleDownloaderM}>
+            <Dialog open={open} onClose={handleDownlaod}>
                 <DialogTitle> Download file </DialogTitle>
                 <DialogContent>
                     <Grid container justify='center' direction='row' spacing={2}>
@@ -70,14 +70,13 @@ class Downloader extends React.Component {
                             </Select>
                         </Grid>}
                     </Grid>
-
                 </DialogContent>
                 <DialogActions>
-                    <OptionsContext.Consumer>
-                        {options =>
-                            <Fab disabled={disableDown} onClick={this.state.downloadTxtFile(options.resolved.tree, extension)} color='secondary'><SaveAlt /></Fab>
+                    <ResultContext.Consumer>
+                        {result =>
+                            <Fab disabled={disableDown} onClick={this.state.downloadTxtFile(result.resolved.tree, extension)} color='secondary'><SaveAlt /></Fab>
                         }
-                    </OptionsContext.Consumer>
+                    </ResultContext.Consumer>
                 </DialogActions>
             </Dialog>
         )

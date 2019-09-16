@@ -1,0 +1,11 @@
+<svg width="82.5" height="82.5" xmlns="http://www.w3.org/2000/svg">
+ <style type="text/css">.st0{fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square;}</style>
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="80" width="80" y="0" x="0"/>
+ </g>
+ <g>
+  <polygon id="svg_1" points="81,81 1.0,1.0 1.0,81 81,1.0" class="st0"/>
+ </g>
+</svg>

@@ -1,6 +1,6 @@
 import React from 'react'
 import Tree from 'react-d3-tree'
-import NodeLabel from './Node'
+import NodeLabel from './GraphNodeLabel'
 
 const svgShape = {
     "shape": "circle",
@@ -20,13 +20,12 @@ class Graph extends React.Component {
                 orientation='vertical'
                 nodeSvgShape={svgShape}
                 allowForeignObjects
-                separation={{siblings: 2, nonSiblings: 3}}
-                transitionDuration={0}
+                separation={{ siblings: 2, nonSiblings: 2 }}
+                transitionDuration={1}
                 nodeLabelComponent={{
                     render: <NodeLabel />,
                     foreignObjectWrapper: {
-                        y:-5,
-                        x:5
+                        x: 50
                     }
                 }} />)
         }

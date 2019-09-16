@@ -1,113 +1,93 @@
 import React from 'react'
-
-import { OptionsContext } from '../options/OptionsProvider'
 import { runASPRALign } from '../../controllers/OptionsController'
-import DownloadManager from '../../components/configuration/Downloader'
-import { Edit, Send, Restore, SaveAlt, FlipToBack } from '@material-ui/icons'
-import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab'
-import { withStyles } from '@material-ui/core'
+import { Send, Restore, SaveAlt, FlipToBack } from '@material-ui/icons'
+import { Fab, Grid, Tooltip } from '@material-ui/core'
+import { OptionsContext } from '../options/OptionsProvider';
+import { ResultContext } from '../options/ResultProvider';
 
-const style = theme => ({
-    speedDial: {
-        position: 'fixed',
-        bottom: theme.spacing(2),
-        right: theme.spacing(3),
-    }
-})
 
-class FabAnalize extends React.Children {
-    constructor(props) {
-        super(props)
-        this.state = {
-            open: false,
-            dialOpen: false,
-            openDownloader: false
-        }
-        this.expandSpeedDial = this.expandSpeedDial.bind(this)
-        this.handleDownloader = this.handleDownloader.bind(this)
-    }
-    handleSpeedDialAction = (type, options, molecules, callback) => event => {
-        switch (type) {
-            case 'Analize':
-                runASPRALign(options, molecules)
-                    .then(res => callback(res.data))
-                    .catch(err => console.log(err))
-                break;
-            case 'Reset':
-                //Reset conffile and options
-                break;
-            case 'Download data':
-                this.handleDownloader()
-                break;
-            case 'Flip card':
-                callback()
-                break;
-            default:
-                break;
-        }
+class FabAnalize extends React.Component {
+    /**
+     * FIXME: Why options and molecules are splitted
+     */
+    handleAnalize = (options, molecules, callbackResolved, callbackError) => event => {        
+        runASPRALign(options, molecules)
+            .then(res => {
+                console.log(res.data)
+                if (res.data.status===0)
+                    callbackResolved(res.data)
+                if (res.data.status===1){
+                    callbackError(res.data)
+                }
+            }).catch(err => {
+               console.log("Error server connection" + err)
+            })
         event.preventDefault()
     }
-    handleDownloader = () => {
-        this.setState({
-            openDownloader: !this.state.openDownloader
-        })
-    }
-    expandSpeedDial = event => {
-        this.setState({
-            dialOpen: !this.state.dialOpen
-        })
+    handleDownloader = (event) => {
+        this.props.handleDownlaod()
         event.preventDefault()
     }
+    handleFlipCard = (event) => {
+        this.props.handleFlip()
+        event.preventDefault()
+    }
+    handleReset = () => {
 
+    }
     render() {
         return (
-            <OptionsContext.Consumer> {options =>
-                <Fade in={openDownloader}><DownloadManager
-                    showDownloaderM={openDownloader}
-                    handleDownloaderM={this.handleDownloader} />
-                </Fade>
-                <Fade in={options.checkMolecule()}>
-                    <SpeedDial
-                        className={classes.speedDial}
-                        ariaLabel="Menu"
-                        onClick={this.expandSpeedDial}
-                        open={dialOpen}
-                        direction='up'
-                        icon={<SpeedDialIcon openIcon={<Edit />} />}
-                    >
-                        {(options.checkMolecule()) &&
-                            <SpeedDialAction
-                                key={'Analize'}
-                                icon={<Send />}
-                                tooltipTitle={'Analize'}
-                                onClick={this.handleSpeedDialAction('Analize', options.opt, options.getMoleculesArray(), options.callbackResolved)}
-                            />}
-                        {(options.checkMolecule()) &&
-                            <SpeedDialAction
-                                key={'Reset'}
-                                icon={<Restore />}
-                                tooltipTitle={'Reset'}
-                                onClick={this.handleSpeedDialAction('Reset', options.opt, options.getMoleculesArray(), options.callbackResolved)}
-                            />
-                        }
-                        {options.downloadable &&
-                            <SpeedDialAction
-                                key={'Download data'}
-                                icon={<SaveAlt />}
-                                tooltipTitle={'Download data'}
-                                onClick={this.handleSpeedDialAction('Download data', '', '', '')}
-                            />}
-                        {options.downloadable &&
-                            <SpeedDialAction
-                                key={'Flip card'}
-                                icon={<FlipToBack />}
-                                tooltipTitle={'Flip card'}
-                                onClick={this.handleSpeedDialAction('Flip card', '', '', options.handleFlipCard)}
-                            />}
-                    </SpeedDial>
-                </Fade>}
-            </OptionsContext.Consumer>)
+            <OptionsContext.Consumer>
+                {options =>
+                    <ResultContext.Consumer>
+                        {result => <> <Grid item container spacing={3}>
+                            <Grid item>
+                                <Fab
+                                    variant='extended'
+                                    color='primary'
+                                    disabled={!options.checkMolecule()}
+                                    onClick={this.handleAnalize(options.opt, options.getMoleculesArray(), result.callbackResolved, result.callbackError)}
+                                >                <Send />
+                                    Run ASPRALign
+                        </Fab></Grid><Grid item>
+                                {options.checkMolecule() && <Fab
+                                    color='secondary'
+                                    disabled={!options.checkMolecule()}
+                                    onClick={this.handleReset()} >
+                                    <Restore />
+                                </Fab>}
+                            </Grid>
+                            {result.isDownlaodable() &&
+                                <Grid item>
+                                    <Tooltip title='Downlaod' >
+                                        <Fab
+                                            color='secondary'
+                                            onClick={this.handleDownloader} >
+                                            <SaveAlt />
+                                        </Fab>
+                                    </Tooltip>
+                                </Grid>
+                            }
+                            {result.isDownlaodable() &&
+                                <Grid item>
+                                    <Tooltip title='Show JSON file instead of Tree Graph' >
+                                        <Fab
+                                            color='secondary'
+                                            onClick={this.handleFlipCard}
+                                        >
+                                            <FlipToBack />
+                                        </Fab>
+                                    </Tooltip>
+                                </Grid>
+                            }
+                        </Grid>
+                        </>}
+                    </ResultContext.Consumer>
+                }
+            </OptionsContext.Consumer>
+        )
+
     }
 }
 
-export default withStyles(style)(FabAnalize)
+export default FabAnalize

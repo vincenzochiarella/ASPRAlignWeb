@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import {
     Drawer, Toolbar, AppBar, List, ListItem, ListItemText,
-    IconButton, withStyles,  Hidden, Button
+    IconButton, withStyles, Hidden, Button
 } from '@material-ui/core'
 
 import {
@@ -14,7 +14,6 @@ import * as ROUTES from '../../constants/routes'
 
 
 import LogoUnicam from '../../resources/unicam-universita-di-camerino-1.png'
-import { OptionsContext } from '../options/OptionsProvider'
 
 const styles = theme => ({
     content: {
@@ -51,8 +50,6 @@ class Layout extends React.Component {
             dialOpen: false,
             openDownloader: false
         }
-        this.expandSpeedDial = this.expandSpeedDial.bind(this)
-        this.handleDownloader = this.handleDownloader.bind(this)
     }
     handleMenuOpen = () => {
         this.setState({
@@ -64,7 +61,7 @@ class Layout extends React.Component {
 
     render() {
         const { children, classes } = this.props
-        const { open, dialOpen, openDownloader } = this.state
+        const { open } = this.state
 
         const MenuList = (
             <>
@@ -107,10 +104,9 @@ class Layout extends React.Component {
             </>
         )
 
-        return (<OptionsContext.Consumer>
-            {options => <>
-                <AppBar position="fixed" color='primary'
-                >
+        return (
+            <>
+                <AppBar position="fixed" color='primary'>
                     <Toolbar className={classes.toolbar} >
                         <Hidden mdUp>
                             <IconButton
@@ -122,7 +118,7 @@ class Layout extends React.Component {
                                 <Menu />
                             </IconButton>
                         </Hidden>
-                        <img src={LogoUnicam} height="35" width="80" />
+                        <img src={LogoUnicam} height="35" width="80" alt='Unicam' />
                         <Hidden smDown>
                             <div className={classes.toolbarButtons}>
                                 {LgMenu}
@@ -140,10 +136,7 @@ class Layout extends React.Component {
                 <main className={classes.content}>
                     {children}
                 </main>
-
-            </>}
-        </OptionsContext.Consumer>
-
+            </>
         )
     }
 

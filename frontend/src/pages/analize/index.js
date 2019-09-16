@@ -1,13 +1,18 @@
 import React from 'react'
-import { Grid, Paper, withStyles,  Typography } from '@material-ui/core'
+import { Grid, Paper, withStyles, Typography } from '@material-ui/core'
 import ReactJson from 'react-json-view'
 import ReactCardFlip from 'react-card-flip'
 
 import Graph from '../../components/graph'
 import Chips from '../../components/chips'
 import Options from '../../components/options/index'
-import { OptionsContext } from '../../components/options/OptionsProvider'
+import FabAnalize from '../../components/fabAnalize'
 import ConfFile from '../../components/configuration/ConfFile'
+
+import DownlaodDialog from '../../components/configuration/Downloader'
+import ErrorDialog from '../../components/error'
+import { ResultContext } from '../../components/options/ResultProvider';
+
 
 const style = theme => ({
     fixedHeight: {
@@ -20,47 +25,73 @@ const style = theme => ({
 })
 
 class Analize extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            openDownloadDialog: false,
+            openErrorDialog: false,
+            flippedCard: false
+        }
+        this.handleDownlaod = this.handleDownlaod.bind(this)
+        this.handleFlip = this.handleFlip.bind(this)
+    }
+    handleDownlaod() {
+        this.setState(prevState => ({ openDownloadDialog: !prevState.openDownloadDialog }))
+    }
+    handleFlip() {
+        this.setState(prevState => ({ flippedCard: !prevState.flippedCard }))
+    }
+
     render() {
         const { classes } = this.props
-        return (
-            <>
-                <OptionsContext.Consumer>
-                    {options =>
-                        <>
-                            <ConfFile />
-                            <Grid container alignItems='stretch' direction='column' spacing={4} justify='center'>
-                                <Grid item>
-                                    <Options/>
-                                </Grid>
-                                <Grid item>
-                                    <Chips options={options} />
-                                </Grid>
-                                {options.resolved.distance!==0.0&&options.opt.align&&
-                                    <Grid item lg sm>
-                                        <Typography variant='h6'>Alignment distance: </Typography>
-                                        <Typography variant='h3' color='secondary'>{options.resolved.distance}</Typography>                                        
-                                    </Grid>
-                                }
-                                {options.resolved.tree &&
-                                    <Grid item lg sm>
-                                        <ReactCardFlip isFlipped={options.flipped} flipDirection="horizontal">
-                                            <Paper className={classes.fixedHeight} key='front'>
-                                                <Graph tree={options.resolved.tree} /> 
-                                            </Paper>
-                                            <Paper key='back'>
-                                                <ReactJson 
-                                                    src={JSON.parse(options.resolved.tree)}
-                                                    name={false}
-                                                    displayDataTypes={false}
-                                                    displayObjectSize={false} />
-                                            </Paper>
-                                        </ReactCardFlip>
-                                    </Grid>}
-                            </Grid >
-                        </>}
-                </OptionsContext.Consumer>
+        const { openDownloadDialog, flippedCard } = this.state
+        return (<>
+            <ConfFile />
+            <ErrorDialog />
+            <DownlaodDialog
+                open={openDownloadDialog}
+                handleDownlaod={this.handleDownlaod}
+            />
+            <Grid container alignItems='stretch' direction='column' spacing={4} justify='center'>
+                <Grid item>
+                    <Options />
+                </Grid>
 
-            </>
+                <Grid item>
+                    <Chips />
+                </Grid>
+                <Grid item>
+                    <FabAnalize
+                        handleDownlaod={this.handleDownlaod}
+                        handleFlip={this.handleFlip}
+                    />
+                </Grid>
+                <ResultContext.Consumer>
+                    {results => (
+                        <>
+                            {results.status === 0 && results.optionsUsed.align && results.optionsUsed.outdist &&
+                                <Grid item lg sm>
+                                    <Typography variant='h6'>Alignment distance: </Typography>
+                                    <Typography variant='h3' color='secondary'>{results.resolved.distance}</Typography>
+                                </Grid>}
+                            {results.status === 0 && !results.optionsUsed.outdist &&
+                                <Grid item lg sm>
+                                    <ReactCardFlip flipDirection="horizontal" isFlipped={flippedCard} >
+                                        <Paper className={classes.fixedHeight} key='front'>
+                                            <Graph tree={results.resolved.tree} />
+                                        </Paper>
+                                        <Paper key='back'>
+                                            <ReactJson
+                                                src={JSON.parse(results.resolved.tree)}
+                                                name={false}
+                                                displayDataTypes={false}
+                                                displayObjectSize={false} />
+                                        </Paper>
+                                    </ReactCardFlip>
+                                </Grid>}
+                        </>)}</ResultContext.Consumer>
+            </Grid >
+        </>
         )
     }
 

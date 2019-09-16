@@ -5,10 +5,10 @@ const fs = require('fs')
 const uniqueFilename = require('unique-filename')
 
 const StringAnalizerJSON = require('./stringAnalizer')
-/**
- * TODO: Error handling from process generated
+/***
+ * 
+ * TODO: unify code
  */
-
 module.exports.startAnalize = Elaboration = (options, input) => {
     return new Promise((resolve, reject) => {
         var tmpFolderName = uniqueFilename(pathFolderTmp)
@@ -21,31 +21,26 @@ module.exports.startAnalize = Elaboration = (options, input) => {
         let arrayOut = []
         JavaProcess.stdout.on('data', (data) => {
             arrayOut.push(data.toString())
-        })
-        JavaProcess.on('exit', (code)=>{
-            console.log(code)
-        })
-        JavaProcess.on('close', (close) => {
-            if (!options.align) {//ulteriore check per evitare errori
-                removeTempFiles(tmpFolderName)
-                resolve(StringAnalizerJSON.parseToJSONTree(arrayOut[0]))
-            }
-            else
-                reject("No output data")
-        })
-        JavaProcess.stderr.on('data', (data) => {
-            console.log("Errore: " + data.toString())
-            reject(data)
-        });
-        JavaProcess.on('error', (err) => {
-            // reject(err);
+        })       
+        JavaProcess.stderr.on('data', (data) => { 
+            arrayOut.push(data.toString())
         });
 
+        JavaProcess.on('exit', (code)=>{
+            switch (code) {
+                case 0:                    
+                    resolve(StringAnalizerJSON.parseToJSONTree(arrayOut[0]))
+                    break;
+                case 2:
+                    reject(arrayOut[0])            
+                //Error 4 aligmnent problem
+                default:
+                    break;
+            }
+            removeTempFiles(tmpFolderName)
+        })
     })
 }
-/**
- * TODO: Error handling from process generated
- */
 
 module.exports.startAlign = Elaboration = (options, input) => {
     return new Promise((resolve, reject) => {
@@ -64,11 +59,7 @@ module.exports.startAlign = Elaboration = (options, input) => {
         JavaProcess.stderr.on('data', (data) => {
             arrayError.push(data.toString())
         });
-        JavaProcess.on('error', (err) => {
-            arrayError.push(data.toString())
-        });
-        JavaProcess.on('close', (close) => {
-            
+        JavaProcess.on('close', (close) => {            
             if (options.align && !options.outdist) {
                 removeTempFiles(tmpFolderName)
                 resolve(StringAnalizerJSON.parseToJSONTreeAndDistance(arrayOut))

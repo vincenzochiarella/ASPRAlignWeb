@@ -1,14 +1,15 @@
 import React from 'react'
-import { withStyles,Chip } from '@material-ui/core';
+import { withStyles, Chip } from '@material-ui/core';
 import {
     Share, DragIndicator, SettingsEthernet, TextFields, AttachFile
 } from '@material-ui/icons'
-const style = theme =>({
+import { OptionsContext} from '../options/OptionsProvider';
+const style = theme => ({
     chipsStyle: {
         color: '#ffffff'
     }
 })
-class Chips extends React.PureComponent{
+class Chips extends React.PureComponent {
     getChips = (options) => {
         let chips = []
         if (options.opt.struct)
@@ -29,15 +30,17 @@ class Chips extends React.PureComponent{
             chips.push({ name: 'Conffile', icon: <AttachFile /> })
         return chips
     }
-    render(){
-        const { options, classes } = this.props
-        return (
-            this.getChips(options).map(chip =><Chip
-                                    size='small'
-                                    color='secondary'
-                                    className={classes.chipsStyle}
-                                    icon={chip.icon}
-                                    label={chip.name} />)
+    render() {
+        const { classes } = this.props
+        return (        
+        <OptionsContext.Consumer>{options => (
+            this.getChips(options).map(chip => <Chip
+                size='small'
+                color='secondary'
+                className={classes.chipsStyle}
+                icon={chip.icon}
+                label={chip.name} />
+            ))}</OptionsContext.Consumer>
         )
     }
 }
