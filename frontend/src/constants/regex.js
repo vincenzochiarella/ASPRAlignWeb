@@ -4,3 +4,5 @@ export const dotBracketNotation =  /^[gaucAUGC]*(?:(?:\n)|(?:\r\n))[\.\[\]\(\)\{
 export const arcAnnotationSequence = /^[gaucAUGC]*(?:(?:\n)|(?:\r\n))(\([0-9]+\,[0-9]+\)(\;?))+$/
 
 export const filename = /^[a-zA-Z0-9]+($|\n)/
+
+export const splitChild =  /[TSC\-\)],[HCN\-\(]/

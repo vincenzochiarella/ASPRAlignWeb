@@ -27,7 +27,8 @@ class ResultProvider extends React.Component {
         status: -1,
         resolved: {
             tree: '',
-            distance: 0.0
+            distance: 0.0,
+            treeForVisualization: ''
         },
         unResolved: {
             error: '',
@@ -37,7 +38,7 @@ class ResultProvider extends React.Component {
          * FIXME: Refactor this part (i don't like the structure of if and else)
          */
         callbackResolved: (data) => {
-            console.log(typeof (data.optionsUsed))
+            // console.log(typeof (data.optionsUsed))
             if (data.optionsUsed.align && !data.optionsUsed.outdist) {
                 this.setState({
                     resolved: {
@@ -64,8 +65,10 @@ class ResultProvider extends React.Component {
                     },
                     optionsUsed: data.optionsUsed,
                     status: 0
-                })
+                })                
             }
+
+
         },
         callbackError: (error) => {
             // console.log(typeof(error.optionsUsed))
@@ -90,6 +93,15 @@ class ResultProvider extends React.Component {
         },
         isDownlaodable: () => {
             return this.state.status === 0
+        },
+        getTreeType: ()=>{
+            const treeType = this.state.optionsUsed
+            if( treeType.align )
+                return 'ALIGN'
+            if( treeType.struct )
+                return 'STRUCT'
+            if( treeType.alg )
+                return 'ALG'            
         }
     }
 

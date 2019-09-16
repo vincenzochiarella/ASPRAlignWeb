@@ -6,14 +6,17 @@ const svgShape = {
     "shape": "circle",
     "shapeProps": {
         "r": 8,
-        "fill": "#4DD0E1",
-        "stroke": "#4DD0E1",
-        "strokeWidth": 2
+        "fill": "#4DD0E1"
     },
 
 }
-
+const textLayout = {
+    textAnchor: "start",
+    x: 15,
+    y: 15
+}
 class Graph extends React.Component {
+
     render() {
         if (this.props.tree) {
             return (<Tree data={JSON.parse(this.props.tree)}
@@ -24,10 +27,13 @@ class Graph extends React.Component {
                 transitionDuration={1}
                 nodeLabelComponent={{
                     render: <NodeLabel />,
-                    foreignObjectWrapper: {
-                        x: 50
-                    }
-                }} />)
+                    // foreignObjectWrapper: {
+                    //     width: "40px",
+                    //     height: "30px",
+                    // }
+                }}
+                // textLayout={textLayout}
+                />)
         }
     }
 }
