@@ -1,30 +1,47 @@
 import React from 'react'
-import { Typography, Grid, Paper } from '@material-ui/core'
+import { Typography, Grid } from '@material-ui/core'
 import { UnfoldMore } from '@material-ui/icons'
 import { ReactComponent as ConcIcon } from '../../icons/Conc.svg';
 import { ReactComponent as CrosIcon } from '../../icons/Cros.svg';
 import { ReactComponent as NestIcon } from '../../icons/Nest.svg';
-import { CROS, CONC, NEST } from '../../constants/rnaInteraction'
+import { CROS, CONC, NEST, } from '../../constants/OperationRegex'
 
-function replaceOperation(string) {
-    if (string.match(CONC))
-        return (<Paper> <ConcIcon width="75%" /></Paper>)
-    if (string.match(CROS))
-        return <CrosIcon width="20px" heigh="20px"/>
-    if (string.match(NEST))
-        return <NestIcon width="75%" />
-    return ''
+
+function getSvg(string) {
+    return (<div>
+        {string.match(CONC) && <ConcIcon width="20px" heigh="20px" />}
+        {string.match(CROS) && <CrosIcon width="20px" heigh="20px" />}
+        {string.match(NEST) && <NestIcon width="20px" heigh="20px" />}
+    </div>
+    )
 }
+
+
+function getColorOperation(leftChild, rightChild) {
+    if (leftChild === rightChild)
+        return {
+                shapeProps: {
+                    fill: 'green',
+                }
+        }
+    else 
+        return null
+}
+
 class NodeLabel extends React.PureComponent {
 
     render() {
         const { nodeData } = this.props
+        nodeData._nodeSvgShape = getColorOperation( 1,1 )
         if (nodeData._children && nodeData._collapsed)
             return (
-                <Grid container justify='center' alignItem='center' direction='row'>
+                <Grid container justify='center' alignItems='center' direction='row'>
+                    
                     <Grid item>
-                        {replaceOperation(nodeData.name)}
+                        {getSvg(nodeData.name)}
                     </Grid>
+
+                    {/* {splitLabel(nodeData.name)} */}
                     <Grid item>
                         <UnfoldMore />
                     </Grid>
@@ -37,9 +54,9 @@ class NodeLabel extends React.PureComponent {
             )
         else
             return (
-                <Grid container justify='center' alignItem='center' direction='row'>
+                <Grid container justify='center' alignItems='center' direction='row'>
                     <Grid item>
-                        {replaceOperation(nodeData.name)}
+                        {getSvg(nodeData.name)}
                     </Grid>
                     <Grid item>
                         <Typography variant='caption'>

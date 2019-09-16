@@ -1,7 +1,8 @@
 import React from 'react'
 import {
     Grid, FormControlLabel, Switch, Radio, IconButton,
-    Paper, Typography, withStyles, RadioGroup, Box, Tab, Tabs
+    Paper, Typography, withStyles, RadioGroup, Box, Tab, Tabs,
+    Button, Tooltip
 } from '@material-ui/core'
 import {
     Edit, Share, TextFields, SettingsEthernet
@@ -65,7 +66,7 @@ const AntTab = withStyles(theme => ({
 /**
  * React COMPONENT Wrapped
  */
-const AntTabs = withStyles(theme =>({
+const AntTabs = withStyles(theme => ({
     root: {
         borderBottom: '1px solid #e8e8e8',
     },
@@ -79,20 +80,20 @@ const AntTabs = withStyles(theme =>({
  */
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-  
+
     return (
-      <Typography
-        component="div"
-        role="tabpanel"
-        hidden={value !== index}
-        id={`full-width-tabpanel-${index}`}
-        aria-labelledby={`full-width-tab-${index}`}
-        {...other}
-      >
-        <Box p={3}>{children}</Box>
-      </Typography>
+        <Typography
+            component="div"
+            role="tabpanel"
+            hidden={value !== index}
+            id={`full-width-tabpanel-${index}`}
+            aria-labelledby={`full-width-tab-${index}`}
+            {...other}
+        >
+            <Box p={3}>{children}</Box>
+        </Typography>
     );
-  }
+}
 
 class Options extends React.Component {
     state = {
@@ -142,11 +143,19 @@ class Options extends React.Component {
                                     </RadioGroup>
                                 </TabPanel>
                                 <TabPanel index={1} value={currentTab}>
-                                    <Grid container direction='column'>
+                                    <Grid container direction='column' spacing={3}>
                                         <Grid item>
-                                            <Typography variant='h5' color='secondary'> Choose RNA string format </Typography>
+                                            <Typography variant='h5' > Choose RNA string format </Typography>
                                         </Grid>
-                                        <Grid container item direction='row'>
+                                        <Grid item>
+                                            <Tooltip title='Click to change input format'>
+                                                <Button onClick={options.changeOpts('aasinput')} variant="contained" color='secondary' >
+                                                    {options.opt.aasinput && ("Arc Annotated Sequence")}
+                                                    {!options.opt.aasinput && ("Dot-Bracket Notation")}
+                                                </Button>
+                                            </Tooltip>
+                                        </Grid>
+                                        {/* <Grid container item direction='row'>
                                             <Grid item>
                                                 <Typography variant='h6'> Dot-Bracket Notation </Typography>
                                             </Grid>
@@ -156,7 +165,7 @@ class Options extends React.Component {
                                             <Grid item>
                                                 <Typography variant='h6'> Arc Annotated Sequence </Typography>
                                             </Grid>
-                                        </Grid>
+                                        </Grid> */}
                                         <Grid item>
                                             <InputMolecule />
                                         </Grid>
@@ -185,18 +194,18 @@ class Options extends React.Component {
                                                     Check Precence Of Only Watson and Crick Pairs
                                                 </Typography>
                                             </Grid>
-                                        {options.opt.align &&
-                                            <Grid item container alignItems='center'>
-                                                {/* <Grid item>
+                                            {options.opt.align &&
+                                                <Grid item container alignItems='center'>
+                                                    {/* <Grid item>
                                                     {options.opt.useconffile ? <Icon color='primary'><CheckCircle /></Icon> : <Icon color='error'><Cancel /></Icon>}
                                                 </Grid> */}
-                                                <Grid item>
-                                                    <IconButton onClick={options.showConfFile}><Edit /></IconButton>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography variant='h6'> Configuration Values </Typography>
-                                                </Grid>
-                                            </Grid>}
+                                                    <Grid item>
+                                                        <IconButton onClick={options.showConfFile}><Edit /></IconButton>
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <Typography variant='h6'> Configuration Values </Typography>
+                                                    </Grid>
+                                                </Grid>}
                                         </Grid>
                                     </Grid>
                                 </TabPanel>

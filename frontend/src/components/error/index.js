@@ -4,20 +4,23 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography }
 import { Warning } from '@material-ui/icons'
 import { ResultContext } from '../options/ResultProvider'
 
-function filterErrorNotAlign( errorComplete ){
-    let errorIndex = errorComplete.indexOf('INPUT ERROR')
-    let errorFiltered = errorComplete.substring(errorIndex)
-    return errorFiltered
-}
+// function filterErrorNotAlign( errorComplete ){
+//     if (!errorComplete.optionsUsed.align)
+//     {let errorIndex = errorComplete.unResolved.error.indexOf('INPUT ERROR')
+//     let errorFiltered = errorComplete.substring(errorIndex)
+//     return errorFiltered}
+//     else return errorComplete.unResolved.error
+// }
 
 class ErrorHandler extends React.Component {
     render() {
         return (
             <ResultContext.Consumer>
                 {result => (<Dialog
+                    scroll="body"
                     open={!result.unResolved.errorShowed}
                     onClose={(event) => result.handleErrorShow(event)}>
-                    <DialogTitle><Warning />{filterErrorNotAlign(result.unResolved.error)}</DialogTitle>
+                    <DialogTitle><Warning />{result.unResolved.error}</DialogTitle>
                     <DialogContent>
                         <Typography variant='h5'>Molecules</Typography>
                         {result.optionsUsed.molecule0}

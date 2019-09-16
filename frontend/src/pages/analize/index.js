@@ -69,7 +69,7 @@ class Analize extends React.Component {
                 <ResultContext.Consumer>
                     {results => (
                         <>
-                            {results.status === 0 && results.optionsUsed.align && results.optionsUsed.outdist &&
+                            {results.status === 0 && (results.optionsUsed.align || results.optionsUsed.outdist ) &&
                                 <Grid item lg sm>
                                     <Typography variant='h6'>Alignment distance: </Typography>
                                     <Typography variant='h3' color='secondary'>{results.resolved.distance}</Typography>

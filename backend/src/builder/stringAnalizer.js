@@ -7,8 +7,14 @@ const closeChilds = new RegExp(/\),/, 'g')   // ),
 const closeChildsNoCom = new RegExp(/\}\]\)/, 'g')//)
 const closeParents = new RegExp(/\)\]/, 'g') // )]
 
-const distanceReg= new RegExp(/Distance = /, 'g')
-const warningOrError = new RegExp(/(WARNING)+|(ERROR)+/, 'g')
+const fixForAlign = new RegExp(/\d\}/, 'g')
+
+const distanceReg = new RegExp(/Distance = /, 'g')
+//const warningOrError = new RegExp(/(WARNING)+|(ERROR)+/, 'g')
+
+function replaceAt (string, index, replacement) {
+    return string.substr(0, index) + replacement+ string.substr(index + replacement.length);
+}
 
 
 function toJSONTree(out) {
@@ -19,21 +25,30 @@ function toJSONTree(out) {
         .replace(closeChilds, "},")
         .replace(closeParents, "}]")
         .replace(closeChildsNoCom, "}]}")
-    return out
+    
+    return fixAlignTree( out )
 }
 
+// Fix for alignment generation json tree
+function fixAlignTree( tree ) {
+    var array1;
+    while ((array1 = fixForAlign.exec(tree) !== null)){
+        tree = replaceAt(tree, fixForAlign.lastIndex -1, ')')
+    }
+    return tree
+}
 function toJSONDistance(distance) {
     distance = distance.replace(distanceReg, '')
     return distance
 }
 function toJSONTreeAndDistance(data) {
-    return [ toJSONTree(data[0]), toJSONDistance(data[1])]
+    return [toJSONTree(data[0]), toJSONDistance(data[1])]
 }
-function toJSONError(error) {
-    error = error.replace(error, ' { "error": "')
-        .concat('" }')
-    return JSON.stringify(distance)
-}
+// function toJSONError(error) {
+//     error = error.replace(error, ' { "error": "')
+//         .concat('" }')
+//     return JSON.stringify(distance)
+// }
 module.exports.parseToJSONTree = toJSONTree
 module.exports.parseToJSONDistance = toJSONDistance
 module.exports.parseToJSONTreeAndDistance = toJSONTreeAndDistance

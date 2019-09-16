@@ -21,19 +21,18 @@ module.exports.startAnalize = Elaboration = (options, input) => {
         let arrayOut = []
         JavaProcess.stdout.on('data', (data) => {
             arrayOut.push(data.toString())
-        })       
-        JavaProcess.stderr.on('data', (data) => { 
+        })
+        JavaProcess.stderr.on('data', (data) => {
             arrayOut.push(data.toString())
         });
 
-        JavaProcess.on('exit', (code)=>{
+        JavaProcess.on('exit', (code) => {
             switch (code) {
-                case 0:                    
+                case 0:
                     resolve(StringAnalizerJSON.parseToJSONTree(arrayOut[0]))
                     break;
                 case 2:
-                    reject(arrayOut[0])            
-                //Error 4 aligmnent problem
+                    reject(arrayOut[0])
                 default:
                     break;
             }
@@ -52,24 +51,30 @@ module.exports.startAlign = Elaboration = (options, input) => {
         const JavaProcess = require('child_process').spawn('java', args)
         console.log(JavaProcess.pid + ": " + args)
         let arrayOut = []
-        let arrayError = []
+        let arrayErr = []
         JavaProcess.stdout.on('data', (data) => {
             arrayOut.push(data.toString())
         })
         JavaProcess.stderr.on('data', (data) => {
-            arrayError.push(data.toString())
+            arrayErr.push(data.toString())
         });
-        JavaProcess.on('close', (close) => {            
-            if (options.align && !options.outdist) {
-                removeTempFiles(tmpFolderName)
-                resolve(StringAnalizerJSON.parseToJSONTreeAndDistance(arrayOut))
+
+        JavaProcess.on('exit', (code) => {
+            switch (code) {
+                case 0:
+                    if (options.align && !options.outdist) 
+                        resolve(StringAnalizerJSON.parseToJSONTreeAndDistance(arrayOut))
+                    else if (options.align && options.outdist) 
+                        resolve(StringAnalizerJSON.parseToJSONDistance(arrayOut[1]))                    
+                    break;
+                case 2:
+                    reject(arrayErr[1])
+                case 4:
+                    reject(arrayErr[1])
+                default:
+                    break;
             }
-            else if (options.align && options.outdist) {
-                removeTempFiles(tmpFolderName)
-                resolve(StringAnalizerJSON.parseToJSONDistance(arrayOut[0]))
-            }
-            else if (arrayOut.length() === 0)
-                reject("No output data")
+            removeTempFiles(tmpFolderName)
         })
     })
 }
@@ -80,7 +85,7 @@ module.exports.startAlign = Elaboration = (options, input) => {
  * @param {String} tempDir Temporary directory where put calculation file
  * @returns {String} Array of args to run script
  */
-function optionsSwitch(options, input, tempDir){
+function optionsSwitch(options, input, tempDir) {
 
 
     var optionsRequested = ['-jar', pathFolderJar + '\\ASPRAlign.jar']

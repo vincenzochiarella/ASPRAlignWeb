@@ -34,7 +34,8 @@ class Chips extends React.PureComponent {
         const { classes } = this.props
         return (        
         <OptionsContext.Consumer>{options => (
-            this.getChips(options).map(chip => <Chip
+            this.getChips(options).map((chip, index) => <Chip
+                key={index}
                 size='small'
                 color='secondary'
                 className={classes.chipsStyle}

@@ -23,8 +23,8 @@ class Input extends React.Component {
             <>
                 <OptionsContext.Consumer>
                     {options => 
-                        <Grid container item lg={11} md={11} xs={11} alignItems='stretch' spacing={4}>
-                            <Grid item lg={options.opt.align ? 6 : 12} md={12} xs={11}>
+                        <Grid container item lg={12} md={12} xs={12} alignItems='stretch' spacing={4}>
+                            <Grid item lg={options.opt.align ? 6 : 12} md={12} xs={12}>
                                 <TextField
                                     id='molecule0'
                                     multiline
@@ -39,7 +39,7 @@ class Input extends React.Component {
                                 />
                             </Grid>
                             {options.opt.align && <Zoom in={true}>
-                                <Grid item lg={6} md={12}  xs={11}>
+                                <Grid item lg={6} md={12}  xs={12}>
                                     <TextField
                                         id='molecule1'
                                         multiline
