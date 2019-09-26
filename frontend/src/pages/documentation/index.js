@@ -46,14 +46,14 @@ class Documents extends React.Component {
             </ChapterWrapper>
             <ChapterWrapper>
                 <ChapterTitle>
-                    1. {InputDescription.title}
+                    1. Inputs
                 </ChapterTitle>
-                {InputDescription.body.map(par => (
+                {/* {InputDescription.body.map(par => (
                     <TextWrapper>{par.paragraph}</TextWrapper>
                 ))}
                 {InputDescription.refs.map(ref => (
                     <RefWrapper >{ref}</RefWrapper>
-                ))}
+                ))} */}
             </ChapterWrapper>
         </>
         )

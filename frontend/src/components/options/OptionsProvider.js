@@ -87,7 +87,9 @@ class OptionsProvider extends React.Component {
                             ...preState.opt,
                             align: false,
                             struct: true,
-                            alg: false
+                            alg: false,
+                            outdist: false,
+                            conffile: false
                         }
                     }))
                     break;
@@ -97,7 +99,9 @@ class OptionsProvider extends React.Component {
                             ...preState.opt,
                             align: false,
                             struct: false,
-                            alg: true
+                            alg: true,
+                            outdist: false,
+                            conffile: false
                         }
                     }))
                     break;
