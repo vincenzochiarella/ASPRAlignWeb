@@ -14,6 +14,7 @@ import * as ROUTES from '../../constants/routes'
 
 
 import LogoUnicam from '../../resources/unicam-universita-di-camerino-1.png'
+import LogoBigData from '../../resources/logo-bigdata.png'
 
 const styles = theme => ({
     content: {
@@ -118,16 +119,13 @@ class Layout extends React.Component {
                                 <Menu />
                             </IconButton>
                         </Hidden>
-                        <img src={LogoUnicam} height="35" width="80" alt='Unicam' />
+                        <img src={LogoUnicam} height="35" width="80" alt='Unicam Logo' />
+                        <img src={LogoBigData} height="65" width="65"  alt='Bioscience Logo'/>
                         <Hidden smDown>
                             <div className={classes.toolbarButtons}>
                                 {LgMenu}
                             </div>
                         </Hidden>
-                        {/* <Typography component="h1" variant="h6" color="inherit" noWrap>
-                            {location.pathname.substr(1).toUpperCase()}
-                        </Typography> */}
-
                     </Toolbar>
                 </AppBar>
                 <Drawer open={open} onClose={this.handleMenuOpen} >

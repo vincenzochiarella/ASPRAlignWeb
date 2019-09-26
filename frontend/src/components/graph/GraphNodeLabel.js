@@ -1,11 +1,11 @@
 import React from 'react'
 import { Typography, Grid, Box } from '@material-ui/core'
 import { UnfoldMore } from '@material-ui/icons'
-import { ReactComponent as ConcIcon } from '../../icons/Conc.svg';
-import { ReactComponent as CrosIcon } from '../../icons/Cros.svg';
-import { ReactComponent as NestIcon } from '../../icons/Nest.svg';
+// import { ReactComponent as ConcIcon } from '../../icons/Conc.svg';
+// import { ReactComponent as CrosIcon } from '../../icons/Cros.svg';
+// import { ReactComponent as NestIcon } from '../../icons/Nest.svg';
 import { CROS, CONC, NEST } from '../../constants/OperationRegex'
-import { splitChild } from '../../constants/regex'
+// import { splitChild } from '../../constants/regex'
 
 import { ResultContext } from '../options/ResultProvider'
 
@@ -15,19 +15,18 @@ const defaultProps = {
     m: 2
   };
 
-function getSvg(string) {
-    return (
-        <div>
-            {string.match(CONC) && <ConcIcon width="20px" heigh="20px" />}
-            {string.match(CROS) && <CrosIcon width="20px" heigh="20px" />}
-            {string.match(NEST) && <NestIcon width="20px" heigh="20px" />}
-        </div>
-    )
-}
+// function getSvg(string) {
+//     return (
+//         <div>
+//             {string.match(CONC) && <ConcIcon width="20px" heigh="20px" />}
+//             {string.match(CROS) && <CrosIcon width="20px" heigh="20px" />}
+//             {string.match(NEST) && <NestIcon width="20px" heigh="20px" />}
+//         </div>
+//     )
+// }
 function checkMatch( outType, node ){
     if(outType==='ALIGN'){
-        var indexToSplit = node.indexOf(',')
-        
+        var indexToSplit = node.indexOf(',')        
         var arr = []
         arr.push(node.substring(0, indexToSplit) )
         arr.push(node.slice(indexToSplit + 1))
@@ -52,10 +51,9 @@ class NodeLabel extends React.PureComponent {
         // if (nodeData._children && nodeData._collapsed)
             return (
                 <Grid container justify='center' alignItems='center' direction='row'>
-
-                    <Grid item>
+                    {/* <Grid item>
                         {getSvg(nodeData.name)}
-                    </Grid>
+                    </Grid> */}
                     {/* {splitLabel(nodeData.name)} */}
                    {nodeData._children && nodeData._collapsed&&( <Grid item>
                         <UnfoldMore />

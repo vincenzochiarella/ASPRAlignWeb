@@ -10,11 +10,11 @@ const svgShape = {
     },
 
 }
-const textLayout = {
-    textAnchor: "start",
-    x: 15,
-    y: 15
-}
+// const textLayout = {
+//     textAnchor: "start",
+//     x: 15,
+//     y: 15
+// }
 class Graph extends React.Component {
 
     render() {
