@@ -65,7 +65,7 @@ module.exports.startAlign = Elaboration = (options, input) => {
                     if (options.align && !options.outdist) 
                         resolve(StringAnalizerJSON.parseToJSONTreeAndDistance(arrayOut))
                     else if (options.align && options.outdist) 
-                        resolve(StringAnalizerJSON.parseToJSONDistance(arrayOut[1]))                    
+                        resolve(StringAnalizerJSON.parseToJSONDistance(arrayOut[0]))                    
                     break;
                 case 2:
                     reject(arrayErr[1])

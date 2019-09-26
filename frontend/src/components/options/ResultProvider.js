@@ -92,7 +92,7 @@ class ResultProvider extends React.Component {
             event.preventDefault()
         },
         isDownlaodable: () => {
-            return this.state.status === 0
+            return (this.state.status === 0 && this.state.resolved.tree !== null)
         },
         getTreeType: ()=>{
             const treeType = this.state.optionsUsed
