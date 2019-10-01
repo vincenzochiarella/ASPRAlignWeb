@@ -1,22 +1,22 @@
 import React from 'react'
 import { Grid, TextField, Zoom } from '@material-ui/core'
 
-import { dotBracketNotation, arcAnnotationSequence } from '../../constants/regex'
+// import { dotBracketNotation, arcAnnotationSequence } from '../../constants/regex'
 import { OptionsContext } from '../../components/options/OptionsProvider'
 
 class Input extends React.Component {
-    validateInput = (aas, string) => {
-        if (string) {
-            if (aas && string.match(arcAnnotationSequence)) {
-                return false
-            }
-            else if (!aas && string.match(dotBracketNotation)) {
-                return false
-            }
-            else
-                return true
-        }
-    }
+        // validateInput = (aas, string) => {
+        //     if (string) {
+        //         if (aas && string.match(arcAnnotationSequence)) {
+        //             return false
+        //         }
+        //         else if (!aas && string.match(dotBracketNotation)) {
+        //             return false
+        //         }
+        //         else
+        //             return true
+        //     }
+        // }
 
     render() {
         return (
@@ -28,7 +28,7 @@ class Input extends React.Component {
                                 <TextField
                                     id='molecule0'
                                     multiline
-                                    error={this.validateInput(options.opt.aasinput, options.opt.molecule0)}
+                                    // error={this.validateInput(options.opt.aasinput, options.opt.molecule0)}
                                     row={2}
                                     rowsMax={10}
                                     value={options.opt.molecule0}
@@ -43,7 +43,7 @@ class Input extends React.Component {
                                     <TextField
                                         id='molecule1'
                                         multiline
-                                        error={this.validateInput(options.opt.aasinput, options.opt.molecule1)}
+                                        // error={this.validateInput(options.opt.aasinput, options.opt.molecule1)}
                                         row={2}
                                         rowsMax={10}
                                         value={options.opt.molecule1}

@@ -10,17 +10,17 @@ class FabAnalize extends React.Component {
     /**
      * FIXME: Why options and molecules are splitted
      */
-    handleAnalize = (options, molecules, callbackResolved, callbackError) => event => {        
+    handleAnalize = (options, molecules, callbackResolved, callbackError) => event => {
         runASPRALign(options, molecules)
             .then(res => {
                 console.log(res.data)
-                if (res.data.status===0)
+                if (res.data.status === 0)
                     callbackResolved(res.data)
-                if (res.data.status===1){
+                if (res.data.status === 1) {
                     callbackError(res.data)
                 }
             }).catch(err => {
-               console.log("Error server connection" + err)
+                console.log("Error server connection" + err)
             })
         event.preventDefault()
     }
@@ -32,9 +32,7 @@ class FabAnalize extends React.Component {
         this.props.handleFlip()
         event.preventDefault()
     }
-    handleReset = () => {
 
-    }
     render() {
         return (
             <OptionsContext.Consumer>
@@ -45,17 +43,18 @@ class FabAnalize extends React.Component {
                                 <Fab
                                     variant='extended'
                                     color='primary'
-                                    disabled={!options.checkMolecule()}
+                                    // disabled={!options.checkMolecule()}
                                     onClick={this.handleAnalize(options.opt, options.getMoleculesArray(), result.callbackResolved, result.callbackError)}
                                 >                <Send />
                                     Run ASPRALign
-                        </Fab></Grid><Grid item>
-                                {options.checkMolecule() && <Fab
+                                </Fab>
+                            </Grid>
+                            <Grid item>
+                                <Fab
                                     color='secondary'
-                                    disabled={!options.checkMolecule()}
-                                    onClick={this.handleReset()} >
+                                    onClick={options.handleReset} >
                                     <Restore />
-                                </Fab>}
+                                </Fab>
                             </Grid>
                             {result.isDownlaodable() &&
                                 <Grid item>

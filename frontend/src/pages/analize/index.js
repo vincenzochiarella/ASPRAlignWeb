@@ -7,11 +7,13 @@ import Graph from '../../components/graph'
 import Chips from '../../components/chips'
 import Options from '../../components/options/index'
 import FabAnalize from '../../components/fabAnalize'
+import Legend from '../../components/legend'
 import ConfFile from '../../components/configuration/ConfFile'
 
 import DownlaodDialog from '../../components/configuration/Downloader'
 import ErrorDialog from '../../components/error'
 import { ResultContext } from '../../components/options/ResultProvider';
+
 
 
 const style = theme => ({
@@ -56,7 +58,11 @@ class Analize extends React.Component {
                 <Grid item>
                     <Options />
                 </Grid>
-
+                <Grid item>
+                    <Typography variant='h6'>
+                        Selected option:
+                    </Typography>
+                </Grid>
                 <Grid item>
                     <Chips />
                 </Grid>
@@ -69,13 +75,19 @@ class Analize extends React.Component {
                 <ResultContext.Consumer>
                     {results => (
                         <>
-                            {results.status === 0 && (results.optionsUsed.align || results.optionsUsed.outdist ) &&
+                            {results.status === 0 && (results.optionsUsed.align || results.optionsUsed.outdist) &&
                                 <Grid item lg sm>
                                     <Typography variant='h6'>Alignment distance: </Typography>
                                     <Typography variant='h3' color='secondary'>{results.resolved.distance}</Typography>
                                 </Grid>}
+                            {results.status === 0 && !results.optionsUsed.outdist&&(
+                                <Grid item container>
+                                    <Legend/>
+                                </Grid>
+                            )}
                             {results.status === 0 && !results.optionsUsed.outdist &&
-                                <Grid item lg sm>
+
+                                (<Grid item lg md={12} xs={12}>
                                     <ReactCardFlip flipDirection="horizontal" isFlipped={flippedCard} >
                                         <Paper className={classes.fixedHeight} key='front'>
                                             <Graph tree={results.resolved.tree} />
@@ -88,7 +100,7 @@ class Analize extends React.Component {
                                                 displayObjectSize={false} />
                                         </Paper>
                                     </ReactCardFlip>
-                                </Grid>}
+                                </Grid>)}
                         </>)}</ResultContext.Consumer>
             </Grid >
         </>

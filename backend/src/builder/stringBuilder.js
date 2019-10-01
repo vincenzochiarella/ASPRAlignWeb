@@ -27,6 +27,7 @@ module.exports.startAnalize = Elaboration = (options, input) => {
         });
 
         JavaProcess.on('exit', (code) => {
+            console.log(code)
             switch (code) {
                 case 0:
                     resolve(StringAnalizerJSON.parseToJSONTree(arrayOut[0]))
@@ -60,6 +61,7 @@ module.exports.startAlign = Elaboration = (options, input) => {
         });
 
         JavaProcess.on('exit', (code) => {
+            
             switch (code) {
                 case 0:
                     if (options.align && !options.outdist) 
@@ -68,9 +70,11 @@ module.exports.startAlign = Elaboration = (options, input) => {
                         resolve(StringAnalizerJSON.parseToJSONDistance(arrayOut[0]))                    
                     break;
                 case 2:
-                    reject(arrayErr[1])
+                    reject(arrayErr[0])
+                    break
                 case 4:
-                    reject(arrayErr[1])
+                    reject(arrayErr[0])
+                    break
                 default:
                     break;
             }
