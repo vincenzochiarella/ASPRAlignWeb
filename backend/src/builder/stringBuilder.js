@@ -111,9 +111,6 @@ function optionsSwitch(options, input, tempDir) {
     }
     if (options.chkpair)
         optionsRequested.push('-c')
-    if (options.latexout) {
-        optionsRequested.push('-l')
-    }
     if (options.useconffile) {
         optionsRequested.push('-n')
         optionsRequested.push(temporaryConffile(options.conffile, tempDir))
