@@ -7,13 +7,12 @@ import { SaveAlt } from '@material-ui/icons'
 import { ResultContext } from '../options/ResultProvider'
 
 import { filename as FILEN } from '../../constants/regex'
-// import { TEXT, TEX } from '../../constants/extension'
-import TexConverter from '../../constants/toTeX'
+import TexConverter from './toTeX'
 
 class Downloader extends React.Component {
     state = {
         fileName: '',
-        extension: '.txt',
+        extension: '.json',
         disableDown: true,
         onChangeFilename: (event) => {
             this.setState({ fileName: event.target.value })
@@ -65,7 +64,7 @@ class Downloader extends React.Component {
                                 onChange={this.handleSelect}
                                 input={<OutlinedInput id='extension'/>}
                             >
-                                <MenuItem value='.txt'>.txt</MenuItem>
+                                <MenuItem value='.json'>.json</MenuItem>
                                 <MenuItem value='.tex'>.tex</MenuItem>
                             </Select>
                         </Grid>}

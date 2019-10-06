@@ -4,7 +4,7 @@ import { UnfoldMore } from '@material-ui/icons'
 // import { ReactComponent as ConcIcon } from '../../icons/Conc.svg';
 // import { ReactComponent as CrosIcon } from '../../icons/Cros.svg';
 // import { ReactComponent as NestIcon } from '../../icons/Nest.svg';
-import { CROS, CONC, NEST } from '../../constants/OperationRegex'
+import { CROS, CONC, NEST } from '../../constants/operations'
 // import { splitChild } from '../../constants/regex'
 
 import { ResultContext } from '../options/ResultProvider'
