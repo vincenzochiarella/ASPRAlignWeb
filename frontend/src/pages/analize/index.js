@@ -10,7 +10,7 @@ import FabAnalize from '../../components/fabAnalize'
 import Legend from '../../components/legend'
 import ConfFile from '../../components/configuration/ConfFile'
 
-import DownlaodDialog from '../../components/configuration/Downloader'
+import DownlaodDialog from '../../components/downloader/Downloader'
 import ErrorDialog from '../../components/error'
 import { ResultContext } from '../../components/options/ResultProvider';
 
