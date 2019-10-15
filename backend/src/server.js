@@ -18,11 +18,12 @@ server.listen(port, () => console.log("Server in ascolto sulla porta: " + port))
 
 //---ONLY IF BUILD MODE---
 // Serve any static files
-//     app.use(express.static(path.join(__dirname, '../../frontend/build')));
-//     // Handle React routing, return all requests to React app
-//     app.get('*', function (req, res) {
-//         res.sendFile(path.join(__dirname, '../../frontend/build', 'index.html'));
-// });
+ // Handle React routing, return all requests to React app
+app.use(express.static(path.join(__dirname, '../../frontend/build')));
+   
+app.get('*', function (req, res) {
+        res.sendFile(path.join(__dirname, '../../frontend/build', 'index.html'));
+});
 
 
 

@@ -6,7 +6,6 @@
     "showscores": false,
     "alg": false,
     "struct": true,
-    "latexout": false,
     "useconffile": false,
     "conffile":{
         "insertOp": 100,

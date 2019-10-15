@@ -35,7 +35,7 @@ class Documents extends React.Component {
         return (<>            
             <ChapterWrapper>
                 <ChapterTitle>
-                   AspraLign <strong>tool</strong>
+                   AspraLign 
                 </ChapterTitle>
                 {/* {Introduction.body.map(par => (
                     <TextWrapper>{par.paragraph}</TextWrapper>

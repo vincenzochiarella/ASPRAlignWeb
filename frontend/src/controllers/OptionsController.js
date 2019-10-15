@@ -1,6 +1,6 @@
 import axios from 'axios'
 /**
- * FIXME: Change 
+ * 
  * @param {JSON} opt 
  * @param {JSON} mols 
  */
