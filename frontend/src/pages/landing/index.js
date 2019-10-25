@@ -12,6 +12,9 @@ class Landing extends React.Component {
                 <Box>
                     <Box zIndex='snacbar'>
                         <Typography variant='h4'>ASPRAlign</Typography>
+                        <Typography variant='body1'>
+                            ASPRAlign permits show tree from RNA molecule, based on operation
+                        </Typography>
                         <Divider />
                         <Button component={Link} to={Analize}>Click to enter</Button>
                     </Box>
