@@ -7,9 +7,6 @@ import { ResultContext } from '../options/ResultProvider';
 
 
 class FabAnalize extends React.Component {
-    /**
-     * FIXME: Why options and molecules are splitted
-     */
     handleAnalize = (options, molecules, callbackResolved, callbackError) => event => {
         runASPRALign(options, molecules)
             .then(res => {
@@ -43,7 +40,6 @@ class FabAnalize extends React.Component {
                                 <Fab
                                     variant='extended'
                                     color='primary'
-                                    // disabled={!options.checkMolecule()}
                                     onClick={this.handleAnalize(options.opt, options.getMoleculesArray(), result.callbackResolved, result.callbackError)}
                                 >                <Send />
                                     Run ASPRALign
